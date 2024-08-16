@@ -67,6 +67,11 @@ void LayoutInitializer::onRemoveRowButtonClicked()
 
 void LayoutInitializer::updateButtonsPosition()
 {
+    if ( widgets->tableWidget->rowCount() == 0)
+    {
+        return;
+    }
+
     // Проверяем, существует ли уже buttonsWidget
     if (widgets->buttonsWidget != nullptr)
     {
@@ -77,13 +82,23 @@ void LayoutInitializer::updateButtonsPosition()
     widgets->buttonsWidget = new QWidget(widgets->tableWidget->parentWidget());
     QVBoxLayout* buttonsLayout = new QVBoxLayout(widgets->buttonsWidget);
 
-    QPushButton* addButton = new QPushButton("+");
-    addButton->setFixedSize(30, 30);
-    addButton->setStyleSheet("border-radius: 15px; background-color: limegreen; font-weight: bold;");
+    QPushButton* addButton = new QPushButton();
+    addButton->setIcon( QIcon( ":/leftwidget/resources/plus-icon.png" ) );
+    addButton->setIconSize( QSize( 30, 30 ) );
+    addButton->setFixedSize( 30, 30 );
+    addButton->setStyleSheet(
+        "QPushButton { border: none; }"
+        "QPushButton:pressed { icon: url(:/leftwidget/resources/plus-icon-pressed.png); }"
+        );
 
-    QPushButton* removeButton = new QPushButton("-");
-    removeButton->setFixedSize(30, 30);
-    removeButton->setStyleSheet("border-radius: 15px; background-color: orange; font-weight: bold;");
+    QPushButton* removeButton = new QPushButton();
+    removeButton->setIcon( QIcon( ":/leftwidget/resources/minus-icon.png" ) );
+    removeButton->setIconSize( QSize( 30, 30 ) );
+    removeButton->setFixedSize( 30, 30 );
+    removeButton->setStyleSheet(
+        "QPushButton { border: none; }"
+        "QPushButton:pressed { icon: url(:/leftwidget/resources/minus-icon-pressed.png); }"
+        );
 
     buttonsLayout->addWidget(addButton);
     buttonsLayout->addWidget(removeButton);
