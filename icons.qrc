@@ -25,4 +25,10 @@
         <file>resources/reddot.png</file>
         <file>resources/emptypng.png</file>
     </qresource>
+    <qresource prefix="/leftwidget">
+        <file>resources/plus-icon.png</file>
+        <file>resources/minus-icon.png</file>
+        <file>resources/plus-icon-pressed.png</file>
+        <file>resources/minus-icon-pressed.png</file>
+    </qresource>
 </RCC>
