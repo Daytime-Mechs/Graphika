@@ -4,7 +4,7 @@
 std::vector<double> MathUtils::multiplyPoints( const double a, const double b ) noexcept
 {
     std::vector<double> x;
-    for( double i = a; i <= b; i += 0.1 )
+    for( double i = a; i <= b; i += 0.02 )
     {
         x.push_back( i );
     }
