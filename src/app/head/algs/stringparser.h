@@ -139,11 +139,11 @@ public:
      *
      * \param x: a list of x values.
      */
-    void setDataX( const std::vector<double> x ) { xTable = x; }
+    void setDataX( const std::vector<double>& x ) { xTable = x; }
 
-    void setDataY( const std::vector<double> y ) { yTable = y; }
+    void setDataY( const std::vector<double>& y ) { yTable = y; }
 
-    void setDataZ( const std::vector<double> z ) { yTable = z; }
+    void setDataZ( const std::vector<double>& z ) { yTable = z; }
 
     /*!
      * \brief eval: method of comparing a given expression with installed functions.
