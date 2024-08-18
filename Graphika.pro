@@ -20,7 +20,8 @@ RESOURCES += \
     resources/web/web.qrc \
     themes.qrc
 
-INCLUDEPATH += ./python3.11 ./qcustomplot/include $$HEADDIR $$HEADDIR/algs \
+INCLUDEPATH += ./python3.11 ./qcustomplot/include ./plugins \
+    $$HEADDIR $$HEADDIR/algs \
     $$HEADDIR/ui $$HEADDIR/ui/wgts $$HEADDIR/ui/wgts/lwgt \
     $$HEADDIR/ui/wgts/rwgt $$HEADDIR/settings $$HEADDIR/utils \
     $$HEADDIR/ui/menu $$HEADDIR/console $$HEADDIR/algs/graphbuilder \
