@@ -51,13 +51,11 @@ void RightWidget::setFunctionText( const QString& text )
 
 void RightWidget::hideBarButtons( const bool& hide )
 {
-    // idgtf how to do it differently
     graphBar->actions().at( 1 )->setDisabled( hide );
     graphBar->actions().at( 2 )->setDisabled( hide );
     graphBar->actions().at( 3 )->setDisabled( hide );
     graphBar->actions().at( 6 )->setDisabled( hide );
     graphBar->actions().at( 7 )->setDisabled( hide );
-    graphBar->actions().at( 9 )->setDisabled( hide );
 }
 
 void RightWidget::printGraph( SpecialBuffer& buffer, Sender& sender, LogList* logList )

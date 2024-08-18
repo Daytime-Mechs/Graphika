@@ -62,44 +62,16 @@ void GL3DGraphBuilder::stepForward( void )
     update();
 }
 
-// TODO: NOT IMPLEMENTED YET
 void GL3DGraphBuilder::savePlotAsImage( void )
 {
-    QString fileName = QFileDialog::getSaveFileName( this, tr( "Сохранить 3D-график" ), QDir::homePath(),
-                                                                                                        tr("Изображения (*.png *.jpg)"));
+    QString fileName = QFileDialog::getSaveFileName( this, tr( "Сохранить 3D-график" ), QDir::homePath(), tr("Изображения (*.png *.jpg)"));
     if ( fileName.isEmpty() )
     {
         return;
     }
 
-    int width = this->width();
-    int height = this->height();
-
-    QOpenGLFramebufferObject fbo( width, height );
-    fbo.bind();
-
-    this->render( &fbo );
-
-    QImage image = fbo.toImage();
-
-    bool saved = false;
-    if( fileName.endsWith( ".png", Qt::CaseInsensitive) )
-    {
-        saved = image.save( fileName, "PNG" );
-    }
-    else if( fileName.endsWith( ".jpg", Qt::CaseInsensitive ) || fileName.endsWith( ".jpeg", Qt::CaseInsensitive ) )
-    {
-        saved = image.save( fileName, "JPEG" );
-    }
-    else
-    {
-        saved = image.save( fileName + ".png", "PNG" );
-    }
-
-    if( saved )
-        qDebug() << "Граф сохранен в файл:" << fileName;
-    else
-        qDebug() << "Не удалось сохранить граф в файл:" << fileName;
+    QPixmap pixmap = QPixmap::grabWidget( this );
+    pixmap.save( fileName + "png" );
 }
 
 void GL3DGraphBuilder::render( QOpenGLFramebufferObject* fbo )

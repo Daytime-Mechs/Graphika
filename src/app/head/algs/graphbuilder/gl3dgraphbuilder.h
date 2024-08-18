@@ -4,6 +4,7 @@
 #include "qevent.h"
 #include <QFileDialog>
 #include <QDebug>
+#include <QInputDialog>
 #include <QImage>
 
 #include <QOpenGLWidget>
