@@ -10,15 +10,6 @@ void Menu::createMenu( QWidget* parent )
 {
     menu = new QMenuBar( parent );
 
-    QMenu* fileMenu = menu->addMenu( tr( "&Файл" ) );
-    QAction* cleanAction = fileMenu->addAction( tr( "Очистить" ) );
-    QAction* openAction = fileMenu->addAction( tr( "Открыть" ) );
-    fileMenu->addSeparator();
-    QAction* saveAction = fileMenu->addAction( tr( "Сохранить PDF" ) );
-    cleanAction->setDisabled( true );
-    openAction->setDisabled( true );
-    saveAction->setDisabled( true );
-
     QMenu* viewMenu = menu->addMenu( tr( "&Вид" ) );
     QAction* viewAction = viewMenu->addAction( "Внешний вид" );
     connect( viewAction, &QAction::triggered, this, &Menu::viewMenuOppened );
