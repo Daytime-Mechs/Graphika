@@ -109,7 +109,6 @@ void RightWidget::printGraph( SpecialBuffer& buffer, Sender& sender, LogList* lo
 void RightWidget::printDerivationGraph( const QVector<double>& x, const QVector<double>& y, Sender& sender, LogList* logList )
 {
     graphBuilder->graph2d->replot();
-    // TODO: исправить заглушку
     auto graph = graphBuilder->PaintG( x, y, "График производной функции " + functionText + " (" + currentLegend + ")", true, false, false );
 
     std::vector<double> _x(std::begin(x), std::end(x));
@@ -266,7 +265,13 @@ void RightWidget::buildPolynome( SpecialBuffer &buffer, Sender &sender, LogList*
     if (logList) {
         LogList::Item item;
         item.item = LogList::ItemType::QString;
-        item.str = new QString("Полученная модель интерполяции: P(x) = " + str + "\n");
+        item.str = new QString(QString(
+                                   "С заданным числовым диапозоном x[ %1, %2 ] получена модель интерполяции: P(x) = %3\n"
+                                   ).arg(x.takeFirst())
+                                   .arg(x.takeLast())
+                                   .arg(str));
+
+
         logList->addItem(item);
 
         QCustomPlot* customPlot = new QCustomPlot();
