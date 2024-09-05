@@ -234,9 +234,7 @@ std::vector<double> LayoutInitializer::fillDataFromTable( int column )
 
 void LayoutInitializer::onSolveButtonClicked( SpecialBuffer& buffer )
 {
-
-    if( derivativeLabel && ( widgets->derivativeExpressionInput->text().isEmpty() ||
-        widgets->expressionInput->text().isEmpty() ) )
+    if ( derivativeLabel && ( widgets->derivativeExpressionInput->text().isEmpty() || widgets->expressionInput->text().isEmpty() ) )
     {
         emit handleParserError( "Заполните все поля" );
         return;
@@ -245,54 +243,67 @@ void LayoutInitializer::onSolveButtonClicked( SpecialBuffer& buffer )
     clearDataTable();
 
     auto expression = widgets->expressionInput->text();
-    auto min        = widgets->min->value();
-    auto max        = widgets->max->value();
-    auto yMin       = widgets->yMin->value();
-    auto yMax       = widgets->yMax->value();
-    auto step       = widgets->step->value();
+    auto min = widgets->min->value();
+    auto max = widgets->max->value();
+    auto yMin = widgets->yMin->value();
+    auto yMax = widgets->yMax->value();
+    auto step = widgets->step->value();
 
-    if( !widgets->nodes->isVisible() && manualInput == false )
+    bool is3D = widgets->tableWidget->columnCount() > 2 && widgets->tableWidget->horizontalHeaderItem( 2 ) && widgets->tableWidget->horizontalHeaderItem( 2 )->text() == "Z";
+    bool isDifferentiation = widgets->tableWidget->columnCount() > 2 && widgets->tableWidget->horizontalHeaderItem( 2 ) && widgets->tableWidget->horizontalHeaderItem( 2 )->text() == "Y'";
+
+    if ( !widgets->nodes->isVisible() && manualInput == false )
     {
-        if( widgets->tableWidget->columnCount() == 3 )
-        {
-            for( double i = yMin; i <= yMax; i += step )
-            {
-                widgets->Y.push_back( i );
-            }
-        }
-        for( double i = min; i <= max; i += step )
+        for ( double i = min; i <= max; i += step )
         {
             widgets->X.push_back( i );
         }
         widgets->parser->setDataX( widgets->X );
 
-        if( widgets->tableWidget->columnCount() == 3 )
+        if ( is3D )
         {
+            for ( double i = yMin; i <= yMax; i += step )
+            {
+                widgets->Y.push_back( i );
+            }
             widgets->parser->setDataY( widgets->Y );
             widgets->Z = widgets->parser->parseExpression( expression.toStdString().c_str(), 3 );
         }
-        else widgets->Y = widgets->parser->parseExpression( expression.toStdString().c_str(), 2 );
+        else
+        {
+            widgets->Y = widgets->parser->parseExpression( expression.toStdString().c_str(), 2 );
+        }
     }
-    else if( widgets->nodes->isVisible() && manualInput == false )
+    else if ( widgets->nodes->isVisible() && manualInput == false )
     {
         setupNodes( widgets->nodes->value() );
         widgets->parser->setDataX( widgets->X );
-        if( widgets->tableWidget->columnCount() == 3 )
+
+        if ( is3D )
         {
             widgets->parser->setDataY( widgets->Y );
             widgets->Z = widgets->parser->parseExpression( expression.toStdString().c_str(), 3 );
         }
-        else widgets->Y = widgets->parser->parseExpression( expression.toStdString().c_str(), 2 );
+        else
+        {
+            widgets->Y = widgets->parser->parseExpression( expression.toStdString().c_str(), 2 );
+        }
     }
-    else if( manualInput )
+    else if ( manualInput )
     {
         widgets->X = fillDataFromTable( 0 );
         widgets->Y = fillDataFromTable( 1 );
-        widgets->Z = fillDataFromTable( 2 );
+        if ( is3D )
+        {
+            widgets->Z = fillDataFromTable( 2 );
+        }
+        else if ( isDifferentiation )
+        {
+            widgets->dY = fillDataFromTable( 2 );
+        }
     }
 
-
-    if( widgets->X.size() > limits::SIZE_LIMIT )
+    if ( widgets->X.size() > limits::SIZE_LIMIT )
     {
         emit handleParserError( "Предел: 1000 узлов" );
         return;
@@ -300,15 +311,23 @@ void LayoutInitializer::onSolveButtonClicked( SpecialBuffer& buffer )
 
     buffer.x = QVector<double>( widgets->X.begin(), widgets->X.end() );
     buffer.y = QVector<double>( widgets->Y.begin(), widgets->Y.end() );
-    buffer.z = QVector<double>( widgets->Z.begin(), widgets->Z.end() );
 
-    if( !widgets->derivativeExpressionInput->text().isEmpty() )
+    if ( is3D )
+    {
+        buffer.z = QVector<double>( widgets->Z.begin(), widgets->Z.end() );
+    }
+    else if ( isDifferentiation )
+    {
+        buffer.dy = QVector<double>( widgets->dY.begin(), widgets->dY.end() );
+    }
+
+    if ( !widgets->derivativeExpressionInput->text().isEmpty() )
     {
         widgets->dY = widgets->parser->parseExpression( widgets->derivativeExpressionInput->text().toStdString().c_str(), 2 );
         buffer.dy = QVector<double>( widgets->dY.begin(), widgets->dY.end() );
     }
 
-    if( couldBuildTable )
+    if ( couldBuildTable )
     {
         showTable( widgets->X, widgets->Y, widgets->Z, widgets->dY );
     }

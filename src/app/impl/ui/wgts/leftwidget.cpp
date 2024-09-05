@@ -119,7 +119,9 @@ void LeftWidget::connectLabels( SpecialBuffer& buffer )
     connect( equationsLayout, &EquationsLayout::equationsTableEdited, this, &LeftWidget::onEquationsTableEdited);
 
     connect( currentLayout->widgets->clearTable, &QPushButton::clicked, currentLayout, &LayoutInitializer::clearTableButtons );
-    connect( functionLayout, &FunctionLayout::switchPlots, currentLayout, &LayoutInitializer::updateButtonsPosition );
+    connect( functionLayout, &FunctionLayout::switchPlots, currentLayout, &LayoutInitializer::clearDataTable );
+    connect( functionLayout, &FunctionLayout::switchPlots, currentLayout, &LayoutInitializer::clearTableButtons );
+    connect( currentLayout->widgets->solve, &QPushButton::clicked, currentLayout, &LayoutInitializer::clearTableButtons );
 }
 
 void LeftWidget::applyProgrammerSettings(double min, double Ymin, double max, double Ymax, double minStep, double maxStep, double minNodes, double maxNodes, int decimals)
