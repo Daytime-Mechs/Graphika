@@ -95,6 +95,8 @@ public:
      */
     void sendDataToSolveSys();
 
+    void sendDataToSolveNonLinearSys();
+
     /*!
      * \brief initPythonInterpreter: Initializes the Python interpreter.
      */
@@ -169,6 +171,7 @@ private:
     QString resultString; ///< Result in string format.
     QString functionToDiff; ///< Name of the function for differentiation.
     QString functionToIntegration; ///< Name of the function for integration.
+    QString nonLinearSys;
 
     double startNumToIntegration; ///< Start value for integration.
     double endNumToIntegration; ///< Final value for integration.
@@ -188,6 +191,7 @@ private:
     QVector<double> resultDiff_XVector; ///< Result vector of x values of points from differentiation.
     QVector<double> resultDiff_YVector; ///< Result vector of y values of points from differentiation.
     QVector<double> resultSys_Vector; ///< Result vector from solving system of equations.
+    QVector<double> resultNonLinearSys_Vector;
 
     QVector<QVector<double>> sys; ///< System of simple equations.
 

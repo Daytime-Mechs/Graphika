@@ -136,6 +136,8 @@ public:
      */
     void sysSolve( QVector<QVector<double>>& data, Sender& sender );
 
+    void nonLinearSysSolve( QString& data, Sender& sender );
+
     void checkoutAxeses( void );
 
     /*!
@@ -256,6 +258,7 @@ signals:
      * \param result: intersection points.
      */
     void readyToSendSysResult( const QString &result );
+    void readyToSendNonLinearSysResult( const QVector<double> &result );
 };
 
 #endif // RIGHTWIDGET_H

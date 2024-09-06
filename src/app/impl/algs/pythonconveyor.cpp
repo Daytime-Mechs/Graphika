@@ -358,6 +358,58 @@ void PythonConveyor::sendDataToSolveSys()
     Py_Finalize();
 }
 
+void PythonConveyor::sendDataToSolveNonLinearSys() {
+    initPythonInterpreter();
+
+    PyObject* function = getPythonFunction(functionName);
+    if (!function)
+    {
+        return;
+    }
+
+    PyObject* args = PyTuple_New(1);
+    PyObject* pyString = PyUnicode_FromString(nonLinearSys.toStdString().c_str());
+
+    PyTuple_SetItem(args, 0, pyString);
+
+    PyObject* pyResult = callPythonFunction(function, args);
+
+    if ( !pyResult )
+    {
+        qDebug() << "Failed to call function" << functionName;
+        PyErr_Print();
+        resultString = "Решение не найдено";
+    }
+    else
+    {
+        if (PyTuple_Check(pyResult))
+        {
+            QVector<double> resultList;
+            QString resultString;
+
+            int size = PyTuple_Size(pyResult);
+
+            for (int i = 0; i < size; ++i)
+            {
+                PyObject* item = PyTuple_GetItem(pyResult, i);
+                double value = PyFloat_AsDouble(item);
+                resultList.append(value);
+                resultString += QString::number(value) + " ";
+            }
+            qDebug() << "Result of nonlinear system using " << functionName << " :" << resultString;
+            setData(&PythonConveyor::resultNonLinearSys_Vector, resultList);
+            setData(&PythonConveyor::resultString, resultString);
+        }
+        Py_DECREF(pyResult);
+    }
+
+    Py_DECREF(args);
+    Py_DECREF(function);
+
+    Py_Finalize();
+
+}
+
 /*!
  * \brief PythonConveyor::initPythonInterpreter: Initializes the Python interpreter and executes the Python script.
  */

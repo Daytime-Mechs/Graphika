@@ -43,6 +43,7 @@ enum class Methods
     INTEG_PARAB, ///< Parabolic method of integration.
     GAUSS, ///< solving a system of equations using the Gaussian method.
     SIMPLE_ITER, ///< solving a system of equations using the simple iterations method.
+    NON_LINEAR_SYS,
     NIL ///< no methods given.
 };
 
@@ -57,6 +58,7 @@ enum class Modules
     DIFFERENTIATION, ///< differentiation.py file to invoke.
     INTEGRATION, ///< integration.py file to invoke.
     EQUATIONS, ///< equations.py file to invoke.
+    NON_LINEAR_EQUATIONS,
     NIL ///< no methods given.
 };
 
