@@ -7,16 +7,6 @@ organisation: Dnevnie mechaniki
 """
 
 from math import log, ceil
-import sympy as sp
-
-def solve_nonlinear_system(equations):
-    e = [eq.strip() for eq in equations.split(',')]
-    vars = sp.symbols([f'x{i+1}' for i in range(len(e))])
-    eq_exprs = [sp.Eq(sp.sympify(eq), 0) for eq in e]
-    solutions = sp.solve(eq_exprs, vars, dict=True)
-
-    return solutions[0].replace("**", "^") if solutions else {}
-
 
 def swap_lines(matrix, index1, index2, n):
     r"""
