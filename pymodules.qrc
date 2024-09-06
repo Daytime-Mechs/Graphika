@@ -4,5 +4,6 @@
         <file>resources/pymodules/differentiation.py</file>
         <file>resources/pymodules/polynomials.py</file>
         <file>resources/pymodules/laes_solver.py</file>
+        <file>resources/pymodules/nonlinear_laes_solver.py</file>
     </qresource>
 </RCC>
