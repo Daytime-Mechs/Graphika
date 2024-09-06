@@ -8,7 +8,6 @@ organisation: Dnevnie mechaniki
 
 from math import log, ceil
 
-
 def swap_lines(matrix, index1, index2, n):
     r"""
     Perform line swap to keep roots in ascending order during calculations.
