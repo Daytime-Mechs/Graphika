@@ -42,6 +42,9 @@ void Sender::setMacro( pymodules::Methods method, pymodules::Modules module ) {
     case pymodules::Methods::SIMPLE_ITER:
         functionName = "simple_iterations";
         break;
+    case pymodules::Methods::NON_LINEAR_SYS:
+        functionName = "solve_nonlinear_system";
+        break;
     default:
         break;
     }
@@ -61,6 +64,9 @@ void Sender::setMacro( pymodules::Methods method, pymodules::Modules module ) {
         break;
     case pymodules::Modules::EQUATIONS:
         moduleName = ":/pyFiles/resources/pymodules/laes_solver.py";
+        break;
+    case pymodules::Modules::NON_LINEAR_EQUATIONS:
+        moduleName = ":/pyFiles/resources/pymodules/nonlinear_laes_solver.py";
         break;
     default:
         break;
