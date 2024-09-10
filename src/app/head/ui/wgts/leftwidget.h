@@ -66,6 +66,7 @@ private:
      */
     void connectLabels( SpecialBuffer& buffer );
     void applyStoredSettings();
+    void hideButtons();
 
 public:
     /*!

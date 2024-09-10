@@ -235,14 +235,6 @@ void MainWindow::calculateSys( QVector<QVector<double>>& data )
     rightWidget->sysSolve( data, sender );
 }
 
-void MainWindow::calculateNonLinearSys( QString &data )
-{
-    //TODO Поменять метод из menubar
-    //pymodules::Methods method = menubar->getSelectedSysMethod();
-    //sender.setMacro( method, pymodules::Modules::NON_LINEAR_EQUATIONS );
-    //rightWidget->nonLinearSysSolve( data, sender );
-}
-
 void MainWindow::invokePolynomeMethod( pymodules::Methods method )
 {
     widgetState = pymodules::Modules::POLYNOMIALS;

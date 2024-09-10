@@ -356,18 +356,6 @@ void RightWidget::sysSolve( QVector<QVector<double>>& data, Sender &sender )
     qDebug() << resultSysStr;
 }
 
-void RightWidget::nonLinearSysSolve( QString& data, Sender &sender)
-{
-    conveyor->setData( &PythonConveyor::functionName, sender.functionName );
-    conveyor->setData( &PythonConveyor::pythonFilePath, sender.moduleName );
-
-    conveyor->setData( &PythonConveyor::nonLinearSys, data );
-    QVector<double> resultNonLinearSysVector = conveyor->getData( &PythonConveyor::resultNonLinearSys_Vector );
-    QString resultNonLinearSysStr = conveyor->getData( &PythonConveyor::resultString );
-    emit readyToSendNonLinearSysResult(resultNonLinearSysVector);
-    qDebug() << resultNonLinearSysStr;
-}
-
 void RightWidget::checkoutAxeses( void )
 {
     if( graphBuilder->graph2d->yAxis->label() == "y'" )

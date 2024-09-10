@@ -76,7 +76,6 @@ void LayoutInitializer::updateButtonsPosition()
     if (widgets->buttonsWidget != nullptr)
     {
         widgets->buttonsWidget->hide();
-        delete widgets->buttonsWidget;
     }
 
     widgets->buttonsWidget = new QWidget(widgets->tableWidget->parentWidget());
@@ -457,5 +456,13 @@ void LayoutInitializer::clearTableButtons()
         widgets->buttonsWidget->hide();
         delete widgets->buttonsWidget;
         widgets->buttonsWidget = nullptr;
+    }
+}
+
+void LayoutInitializer::hideButtonsWidget()
+{
+    if (widgets->buttonsWidget != nullptr)
+    {
+        widgets->buttonsWidget->hide();
     }
 }

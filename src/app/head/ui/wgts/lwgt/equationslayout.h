@@ -47,6 +47,7 @@ public slots:
     void updateEquationsButtonsPosition();
     void onAddEquationRowButtonClicked();
     void onRemoveEquationRowButtonClicked();
+    void hideEquationsButtonsWidget();
 
 signals:
     void equationsTableEdited();

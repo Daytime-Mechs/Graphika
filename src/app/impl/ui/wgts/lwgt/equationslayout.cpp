@@ -120,6 +120,14 @@ void EquationsLayout::onRemoveEquationRowButtonClicked()
     updateEquationsButtonsPosition();
 }
 
+void EquationsLayout::hideEquationsButtonsWidget()
+{
+    if (widgets->equationsButtonsWidget != nullptr)
+    {
+        widgets->equationsButtonsWidget->hide();
+    }
+}
+
 QGridLayout *EquationsLayout::get()
 {
     return layout;
