@@ -68,7 +68,7 @@ public:
     /*!
      * \brief sendArraysToPythonFunction: Sends lists of strings of numbers to functions in python file.
      */
-    void sendArraysToPythonFunction();
+    QString sendArraysToPythonFunction( const QString& pythonFilePath, const QString& functionName, const std::vector<double>& xVector, const std::vector<double>& yVector );
 
     /*!
      * \brief getResourceFilePath: Returns absolute path from resource file path.
@@ -83,24 +83,23 @@ public:
     /*!
      * \brief sendDataToDifferentiation: Sends data to differentiation function.
      */
-    void sendDataToDifferentiation();
+    std::pair< QVector<double>, QVector<double> > sendDataToDifferentiation( const QString& pythonFilePath, const QString& functionName, const QVector<double>& xVector, const QVector<double>& yVector );
 
     /*!
      * \brief sendDataToIntegration: Sends data to integration function.
      */
-    void sendDataToIntegration();
-
+    QString sendDataToIntegration( const QString& pythonFilePath, const QString& functionName, const QVector<double>& xVector, const QVector<double>& yVector );
     /*!
      * \brief sendDataToSolveSys: Sends data to solve a system of equations.
      */
-    void sendDataToSolveSys();
+    QString sendDataToSolveSys( const QString& pythonFilePath, const QString& functionName, const QVector< QVector<double> >& sys );
 
-    void sendDataToSolveNonLinearSys();
+    QVector<double> sendDataToSolveNonLinearSys( const QString& pythonFilePath, const QString& functionName, const QString& nonLinearSys );
 
     /*!
      * \brief initPythonInterpreter: Initializes the Python interpreter.
      */
-    void initPythonInterpreter();
+    void initPythonInterpreter( const QString& pythonFilePath );
 
 
     /*!
@@ -110,7 +109,7 @@ public:
      *
      * \return Pointer to function in python file.
      */
-    PyObject* getPythonFunction(const QString& functionName);
+    PyObject* getPythonFunction( const QString& functionName );
 
     /*!
      * \brief callPythonFunction: Calls a python function with arguments.
@@ -120,7 +119,7 @@ public:
      *
      * \return Pointer to result of executing a function.
      */
-    PyObject* callPythonFunction( PyObject* function, PyObject* args );
+    PyObject* callPythonFunction( PyObject* function, PyObject* args, const QString& functionName );
 
     /*!
      * \brief buildPyListFromQStringList: Builds python list from QStringList.
@@ -140,61 +139,10 @@ public:
      */
     PyObject* buildPyListFromStdVector( const std::vector< double >& vector );
 
-    /*!
-     * \brief setData: Sets the value to a class member.
-     *
-     * \param member - pointer to a class member.
-     * \param value - value to set.
-     */
-    template<typename T>
-    void setData( T PythonConveyor::* member, const T& value )
-    {
-        this->*member = value;
-    }
-
-    /*!
-     * \brief getData: Gets the value of a class member.
-     *
-     * \param member - pointer to a class member.
-     *
-     * \return Value of a class member.
-     */
-    template<typename T>
-    T getData( T PythonConveyor::* member ) const
-    {
-        return this->*member;
-    }
-
 private:
-    QString pythonFilePath; ///< Path to pyhton file.
-    QString functionName; ///< Name of the function in pyhton file.
-    QString resultString; ///< Result in string format.
-    QString functionToDiff; ///< Name of the function for differentiation.
-    QString functionToIntegration; ///< Name of the function for integration.
-    QString nonLinearSys;
-
-    double startNumToIntegration; ///< Start value for integration.
-    double endNumToIntegration; ///< Final value for integration.
-    double startNumToDiff; ///< Start value for differentiation.
-    double endNumToDiff; ///< Final value for differentiation.
-    double resultValue; ///< Result in double format.
-
-    std::vector<double> xVector; ///< Vector of x values of points.
-    std::vector<double> yVector; ///< Vector of y values of points.
-    std::vector<double> numVector; ///< Vector of nums.
-
     PyObject* module; ///< Pointer to python file.
     PyObject* globals; ///< Pointer to global context needed for python initialization.
     PyObject* resultPyObj; ///< Pointer to result from execution of function in python file.
-
-    QVector<double> result_Vector; ///< Result vector.
-    QVector<double> resultDiff_XVector; ///< Result vector of x values of points from differentiation.
-    QVector<double> resultDiff_YVector; ///< Result vector of y values of points from differentiation.
-    QVector<double> resultSys_Vector; ///< Result vector from solving system of equations.
-    QVector<double> resultNonLinearSys_Vector;
-
-    QVector<QVector<double>> sys; ///< System of simple equations.
-
     /*!
      * \brief isResourcePath: Checks if path is resource.
      *
