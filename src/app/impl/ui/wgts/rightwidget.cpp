@@ -299,73 +299,30 @@ void RightWidget::buildPolynome( SpecialBuffer &buffer, Sender &sender, LogList*
 
 void RightWidget::interpolationSolve( const std::vector<double> &x, const std::vector<double> &y, Sender& sender )
 {
-    conveyor->setData( &PythonConveyor::functionName, sender.functionName );
-    conveyor->setData( &PythonConveyor::pythonFilePath, sender.moduleName );
-    conveyor->setData( &PythonConveyor::xVector, x );
-    conveyor->setData( &PythonConveyor::yVector, y );
-
-    conveyor->sendArraysToPythonFunction();
-    QString str = conveyor->getData( &PythonConveyor::resultString );
+    QString str = conveyor->sendArraysToPythonFunction( sender.moduleName, sender.functionName, x, y );
     resultModel = str.toStdString();
 }
 
 void RightWidget::integrationSolve( const QVector<double>& x, const QVector<double>& y, Sender &sender )
 {
-    conveyor->setData( &PythonConveyor::functionName, sender.functionName );
-    conveyor->setData( &PythonConveyor::pythonFilePath, sender.moduleName );
-
-    std::vector<double> _x(std::begin(x), std::end(x));
-    std::vector<double> _y(std::begin(y), std::end(y));
-    conveyor->setData( &PythonConveyor::xVector, _x );
-    conveyor->setData( &PythonConveyor::yVector, _y );
-
-    conveyor->sendDataToIntegration();
-    QString resultStr = conveyor->getData( &PythonConveyor::resultString );
+    QString resultStr = conveyor->sendDataToIntegration( sender.moduleName, sender.functionName, x, y );
     area = resultStr.toStdString();
     emit readyToSendArea( area );
 }
 
 void RightWidget::differentiationSolve( const QVector<double>& x, const QVector<double>& y, Sender& sender )
 {
-    conveyor->setData( &PythonConveyor::functionName, sender.functionName );
-    conveyor->setData( &PythonConveyor::pythonFilePath, sender.moduleName );
-
-    std::vector<double> _x(std::begin(x), std::end(x));
-    std::vector<double> _y(std::begin(y), std::end(y));
-
-    conveyor->setData( &PythonConveyor::xVector, _x );
-    conveyor->setData( &PythonConveyor::yVector, _y );
-
-    conveyor->sendDataToDifferentiation();
-    QVector<double> resultX = conveyor->getData( &PythonConveyor::resultDiff_XVector );
-    QVector<double> resultY = conveyor->getData( &PythonConveyor::resultDiff_YVector );
+    std::pair< QVector<double>, QVector<double> > diffResult = conveyor->sendDataToDifferentiation( sender.moduleName, sender.functionName, x, y );
+    QVector<double> resultX = diffResult.first;
+    QVector<double> resultY = diffResult.second;
     printDerivationGraph( resultX, resultY, sender, nullptr );
 }
 
 void RightWidget::sysSolve( QVector<QVector<double>>& data, Sender &sender )
 {
-    conveyor->setData( &PythonConveyor::functionName, sender.functionName );
-    conveyor->setData( &PythonConveyor::pythonFilePath, sender.moduleName );
-
-    conveyor->setData( &PythonConveyor::sys, data );
-
-    conveyor->sendDataToSolveSys();
-    QVector<double> resultSysVector = conveyor->getData( &PythonConveyor::resultSys_Vector );
-    QString resultSysStr = conveyor->getData( &PythonConveyor::resultString );
+    QString resultSysStr = conveyor->sendDataToSolveSys( sender.moduleName, sender.functionName, data );
     emit readyToSendSysResult( resultSysStr );
     qDebug() << resultSysStr;
-}
-
-void RightWidget::nonLinearSysSolve( QString& data, Sender &sender)
-{
-    conveyor->setData( &PythonConveyor::functionName, sender.functionName );
-    conveyor->setData( &PythonConveyor::pythonFilePath, sender.moduleName );
-
-    conveyor->setData( &PythonConveyor::nonLinearSys, data );
-    QVector<double> resultNonLinearSysVector = conveyor->getData( &PythonConveyor::resultNonLinearSys_Vector );
-    QString resultNonLinearSysStr = conveyor->getData( &PythonConveyor::resultString );
-    emit readyToSendNonLinearSysResult(resultNonLinearSysVector);
-    qDebug() << resultNonLinearSysStr;
 }
 
 void RightWidget::checkoutAxeses( void )

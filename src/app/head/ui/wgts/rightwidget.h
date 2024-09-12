@@ -136,8 +136,6 @@ public:
      */
     void sysSolve( QVector<QVector<double>>& data, Sender& sender );
 
-    void nonLinearSysSolve( QString& data, Sender& sender );
-
     void checkoutAxeses( void );
 
     /*!

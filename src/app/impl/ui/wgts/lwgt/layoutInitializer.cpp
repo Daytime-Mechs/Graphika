@@ -459,3 +459,11 @@ void LayoutInitializer::clearTableButtons()
         widgets->buttonsWidget = nullptr;
     }
 }
+
+void LayoutInitializer::hideButtonsWidget()
+{
+    if (widgets->buttonsWidget != nullptr)
+    {
+        widgets->buttonsWidget->hide();
+    }
+}

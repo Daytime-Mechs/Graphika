@@ -192,6 +192,7 @@ public slots:
     void updateButtonsPosition();
 
     void clearTableButtons();
+    void hideButtonsWidget();
 
 signals:
     /*!

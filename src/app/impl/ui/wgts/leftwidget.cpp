@@ -21,6 +21,8 @@ void LeftWidget::initLayout( SpecialBuffer& buffer, pymodules::Modules module )
         emit switchToGraphBuilder();
     }
 
+    hideButtons();
+
     switch( module )
     {
     case pymodules::Modules::NIL:
@@ -176,4 +178,15 @@ void LeftWidget::onEquationsTableEdited()
     QTimer::singleShot(2, equationsLayout, &EquationsLayout::updateEquationsButtonsPosition );
     equationsLayout->updateEquationsButtonsPosition();
 
+}
+
+void LeftWidget::hideButtons()
+{
+    if ( currentLayout != nullptr )
+    {
+        currentLayout->hideButtonsWidget();
+        if (currentLayout == equationsLayout) {
+            equationsLayout->hideEquationsButtonsWidget();
+        }
+    }
 }

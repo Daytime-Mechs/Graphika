@@ -116,7 +116,6 @@ public slots:
      * \param data: numerous of unknown and free members of equation.
      */
     void calculateSys( QVector<QVector<double>>& data );
-    void calculateNonLinearSys( QString &data );
 
     /*!
      * \brief startSession: in development. starts a data logging session for the report.
