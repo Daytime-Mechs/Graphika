@@ -18,6 +18,7 @@
 #include "sender.h"
 #include "loglist.h"
 #include "settings.h"
+#include "mathutils.h"
 
 /*!
  * \class RightWidget
@@ -117,7 +118,7 @@ public:
      * \param y: y data variables.
      * \param sender: differentiation module with specific method.
      */
-    void differentiationSolve( const QVector<double>& x, const QVector<double>& y, Sender& sender );
+    void differentiationSolve( SpecialBuffer& buffer, const QVector<double>& x, const QVector<double>& y, Sender& sender );
 
     /*!
      * \brief integrationSolve: method for python integration.py module invokation.

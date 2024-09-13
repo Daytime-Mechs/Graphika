@@ -152,7 +152,7 @@ void RightWidget::printDiffGraph( SpecialBuffer &buffer, Sender &sender, LogList
     buildWidgetForDerivativeOperations();
     graphBuilder->graph2d->replot();
 
-    differentiationSolve( x, y, sender );
+    differentiationSolve( buffer, x, y, sender );
 
     if( logList )
     {
@@ -310,11 +310,21 @@ void RightWidget::integrationSolve( const QVector<double>& x, const QVector<doub
     emit readyToSendArea( area );
 }
 
-void RightWidget::differentiationSolve( const QVector<double>& x, const QVector<double>& y, Sender& sender )
+void RightWidget::differentiationSolve( SpecialBuffer& buffer, const QVector<double>& x, const QVector<double>& y, Sender& sender )
 {
     std::pair< QVector<double>, QVector<double> > diffResult = conveyor->sendDataToDifferentiation( sender.moduleName, sender.functionName, x, y );
     QVector<double> resultX = diffResult.first;
     QVector<double> resultY = diffResult.second;
+
+
+    std::vector<double> first;
+    first.assign(resultY.begin(), resultY.end());
+    std::vector<double> second;
+    second.assign(buffer.dy.begin(), buffer.dy.end());
+
+    double diffError = MathUtils::calculateAverageError(first, second);
+    qDebug() << "Средняя погрешность : " << diffError;
+
     printDerivationGraph( resultX, resultY, sender, nullptr );
 }
 
