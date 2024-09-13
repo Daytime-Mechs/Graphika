@@ -84,6 +84,7 @@ private:
 
     QAction* sysAction; ///< equations action menu.
     QAction* gaussMethod; ///< specific equations method.
+    QAction* nonlinearNewthonMethod; ///< specific equations method.
     QAction* simpleIterMethod; ///< specific equations method.
 
     QMenu* diffMenu; ///< derivation menu.
@@ -158,10 +159,11 @@ private:
 
 signals:
     void currentMethodChanged( const QString& methodName );
+    void containsNonLinearData( const bool& nonLinear );
 
 private slots:
-    void handleDiffActionTriggered();
-    void handleIntegralActionTriggered();
+    void handleDiffActionTriggered( void );
+    void handleIntegralActionTriggered( void );
 };
 
 #endif // MENUBAR_H

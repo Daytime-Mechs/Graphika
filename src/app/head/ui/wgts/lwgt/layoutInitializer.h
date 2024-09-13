@@ -14,11 +14,15 @@
 #include <QTextEdit>
 #include <QTextDocument>
 #include <buffer.h>
+#include <QString>
 #include "widgets.h"
 #include "mathutils.h"
-//#include <QWebEngineView>
-//#include <QWebEnginePage>
-//#include <QWebEngineSettings>
+
+struct Equation {
+    std::vector<std::string> variables;
+    double constant;
+    double rhs;
+};
 
 class MathWidget;
 
@@ -194,6 +198,10 @@ public slots:
     void clearTableButtons();
     void hideButtonsWidget();
 
+    void containsNonLinearData( const bool& nl );
+
+    void calculateDiffError( const QVector<double>& y1, const QVector<double>& y2 );
+
 signals:
     /*!
      * \brief validExpression: is given math expression was typed currectly.
@@ -220,6 +228,8 @@ signals:
      * \param data: given formed data from table to vevctor of real number vectors.
      */
     void readyToSendEquationsData( QVector<QVector<double>>& data );
+
+    void readyToSendNonLinearSys( const QString& sys );
 };
 
 #endif

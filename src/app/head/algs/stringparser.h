@@ -145,6 +145,10 @@ public:
 
     void setDataZ( const std::vector<double>& z ) { yTable = z; }
 
+    void setInputData( unsigned const char* input ) { this->input = input; }
+
+    unsigned char getInputData( void ) const { return *input; }
+
     /*!
      * \brief eval: method of comparing a given expression with installed functions.
      *

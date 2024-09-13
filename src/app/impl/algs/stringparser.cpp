@@ -11,7 +11,7 @@ std::vector<double> StringParser::parseExpression( QString input, int dimensiona
 {
     QByteArray bytes = input.toUtf8();
     this->input = reinterpret_cast<unsigned const char*>( bytes.constData() );
-    auto parsed = parseExpression();
+    std::optional<Expression> parsed = parseExpression();
 
     if( dimensional == 3 )
     {

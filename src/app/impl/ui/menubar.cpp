@@ -164,17 +164,23 @@ void MenuBar::initSysMenu()
 {
     sysMenu = new QMenu( this );
 
-    gaussMethod = sysMenu->addAction( "Метод Гаусса" );
+    gaussMethod = sysMenu->addAction( "Метод Гаусса (линейный)" );
+    nonlinearNewthonMethod = sysMenu->addAction( "Метод Ньютона (нелинейный)" );
     simpleIterMethod = sysMenu->addAction( "Метод простых итераций" );
 
     gaussMethod->setCheckable( true );
+    nonlinearNewthonMethod->setCheckable( true );
     simpleIterMethod->setCheckable( true );
     simpleIterMethod->setDisabled( true );
 
     gaussMethod->setChecked( true );
+    nonlinearNewthonMethod->setChecked( false );
 
     connect( gaussMethod, &QAction::triggered, this, [=]() {
         updateSysCheckState( gaussMethod );
+    });
+    connect( nonlinearNewthonMethod, &QAction::triggered, this, [=]() {
+        updateSysCheckState( nonlinearNewthonMethod );
     });
     connect( simpleIterMethod, &QAction::triggered, this, [=]() {
         updateSysCheckState( simpleIterMethod );
@@ -262,10 +268,22 @@ void MenuBar::updateSysCheckState( QAction *checkedAction )
         if ( checkedAction == gaussMethod )
         {
             simpleIterMethod->setChecked( false );
+            nonlinearNewthonMethod->setChecked( false );
+            gaussMethod->setChecked( true );
+            emit containsNonLinearData( false );
+        }
+        else if( checkedAction == nonlinearNewthonMethod )
+        {
+            nonlinearNewthonMethod->setChecked( true );
+            simpleIterMethod->setChecked( false );
+            gaussMethod->setChecked( false );
+            emit containsNonLinearData( true );
         }
         else if ( checkedAction == simpleIterMethod )
         {
             gaussMethod->setChecked( false );
+            nonlinearNewthonMethod->setChecked( false );
+            simpleIterMethod->setChecked( false );
         }
     }
     else

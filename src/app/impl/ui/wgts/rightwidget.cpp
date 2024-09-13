@@ -58,6 +58,15 @@ void RightWidget::hideBarButtons( const bool& hide )
     graphBar->actions().at( 7 )->setDisabled( hide );
 }
 
+void RightWidget::acceptNonLinearSys( const QString& sys )
+{
+    qDebug() << "acceptNonLinearSys\n";
+    eqSysText = sys;
+    auto xy = new QVector<QVector<double>>();
+    auto send = new Sender();
+    sysSolve( *xy, *send );
+}
+
 void RightWidget::printGraph( SpecialBuffer& buffer, Sender& sender, LogList* logList )
 {
     x = buffer.x;
@@ -315,11 +324,24 @@ void RightWidget::differentiationSolve( const QVector<double>& x, const QVector<
     std::pair< QVector<double>, QVector<double> > diffResult = conveyor->sendDataToDifferentiation( sender.moduleName, sender.functionName, x, y );
     QVector<double> resultX = diffResult.first;
     QVector<double> resultY = diffResult.second;
+    emit calculateError( resultY, y );
     printDerivationGraph( resultX, resultY, sender, nullptr );
 }
 
-void RightWidget::sysSolve( QVector<QVector<double>>& data, Sender &sender )
+void RightWidget::sysSolve( const QVector<QVector<double>>& data, const Sender& sender )
 {
+    if( eqSysText.size() > 2 )
+    {
+        QVector<double> resultSysVector = conveyor->sendDataToSolveNonLinearSys(":/pyFiles/resources/pymodules/nonlinear_laes_solver.py", "solve_nonlinear_system", eqSysText );
+        qDebug() << "getting vector: ";
+        for( const auto& e : resultSysVector )
+        {
+            qDebug() << e << "\n";
+        }
+        eqSysText.clear();
+        return;
+    }
+
     QString resultSysStr = conveyor->sendDataToSolveSys( sender.moduleName, sender.functionName, data );
     emit readyToSendSysResult( resultSysStr );
     qDebug() << resultSysStr;

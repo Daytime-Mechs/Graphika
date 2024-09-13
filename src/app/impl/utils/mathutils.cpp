@@ -1,6 +1,5 @@
 #include "mathutils.h"
 
-
 std::vector<double> MathUtils::multiplyPoints( const double a, const double b ) noexcept
 {
     std::vector<double> x;
@@ -25,7 +24,7 @@ void MathUtils::setupNodes( std::vector<double>& data, const double nodes, const
     }
 }
 
-double MathUtils::calculateAverageError( std::vector<double> &X1, std::vector<double> &X2 ) noexcept
+double MathUtils::calculateAverageError( const QVector<double> &X1, const QVector<double> &X2 ) noexcept
 {
     if( X1.size() == 0 || X2.size() == 0 )
     {

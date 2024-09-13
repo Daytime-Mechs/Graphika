@@ -1,5 +1,10 @@
 #include "layoutInitializer.h"
 #include <QDebug>
+#include <QString>
+#include <array>
+#include <iomanip>
+#include "mathutils.h"
+#include "stringparser.h"
 
 void LayoutInitializer::onInputTextChanged( const QString& text )
 {
@@ -162,7 +167,7 @@ void LayoutInitializer::hideFirstLayer( void )
 
     widgets->nodes->hide();
     widgets->nodesLabel->hide();
-    widgets->error->hide();
+    //widgets->error->hide();
     widgets->calculatedArea->hide();
     widgets->area->hide();
 
@@ -180,7 +185,7 @@ void LayoutInitializer::hideSecondLayer( void )
 
     widgets->stepLabel->hide();
     widgets->step->hide();
-    widgets->error->hide();
+    //widgets->error->hide();
     widgets->calculatedArea->hide();
     widgets->area->hide();
 
@@ -419,33 +424,125 @@ void LayoutInitializer::acceptData( const QString& model, const double a, const 
     emit readyToDraw( x, y );
 }
 
-void LayoutInitializer::onSolveEquationsButtonClicked( void )
-{
-    for( int row{}; row < widgets->equationsTableWidget->rowCount(); ++row )
-    {
-        QTableWidgetItem* firstColumnItem = widgets->equationsTableWidget->item( row, 0 );
-        QTableWidgetItem* secondColumnItem = widgets->equationsTableWidget->item( row, 1 );
+std::string solveEquation(const std::string& equation) {
+    size_t equalPos = equation.find('=');
 
-        if( firstColumnItem == nullptr || secondColumnItem == nullptr )
-        {
-            qDebug() << "There is some blank labels\n";
-            continue;
-        }
-
-        QString firstCol = firstColumnItem->text();
-        QString secondCol = secondColumnItem->text();
-
-        if( !ExpressionValidator::validateTableRow( firstCol, secondCol ) )
-        {
-            qDebug() << "ERROR OF TYPING\n";
-            return;
-        }
+    std::string expression = equation.substr(0, equalPos);
+    std::string constStr = equation.substr(equalPos + 1);
+    char* endPtr;
+    double constant = std::strtod(constStr.c_str(), &endPtr);
+    if (endPtr == constStr.c_str()) {
+        return equation;
     }
-    auto data = MathUtils::formTheSystemOfEquations( *widgets->equationsTableWidget );
-    emit readyToSendEquationsData( data );
+    char sign = constant >= 0 ? '+' : '-';
+    sign = sign == '+' ? '-' : '+';
+    std::string result = expression + sign + " " + std::to_string(std::abs(constant));
+
+    return result;
 }
 
-void LayoutInitializer::setEquationsResult(const QString &result)
+void LayoutInitializer::onSolveEquationsButtonClicked( void )
+{
+    int rowCount = widgets->equationsTableWidget->rowCount();
+    if( !widgets->nonLinear )
+    {
+        for( int row{}; row < rowCount; ++row )
+        {
+            QTableWidgetItem* firstColumnItem = widgets->equationsTableWidget->item( row, 0 );
+            QTableWidgetItem* secondColumnItem = widgets->equationsTableWidget->item( row, 1 );
+
+            if( firstColumnItem == nullptr || secondColumnItem == nullptr )
+            {
+                qDebug() << "There is some blank labels\n";
+                continue;
+            }
+
+            QString firstCol = firstColumnItem->text();
+            QString secondCol = secondColumnItem->text();
+
+            if( !ExpressionValidator::validateTableRow( firstCol, secondCol ) )
+            {
+                qDebug() << "ERROR OF TYPING\n";
+                return;
+            }
+        }
+        auto data = MathUtils::formTheSystemOfEquations( *widgets->equationsTableWidget );
+        emit readyToSendEquationsData( data );
+    }
+    else
+    {
+        std::vector<QString> equations;
+        for( int row = 0; row < rowCount; ++row )
+        {
+            if( !widgets->tableWidget->rowAt( row ) ) break;
+            QTableWidgetItem* leftItem = widgets->equationsTableWidget->item( row, 0 );
+            QTableWidgetItem* rightItem = widgets->equationsTableWidget->item( row, 1 );
+
+            if( leftItem && rightItem )
+            {
+                QString leftPart = leftItem->text();
+                QString rightPart = rightItem->text();
+
+                equations.push_back( (solveEquation(leftPart.toStdString() + " = " + rightPart.toStdString())).c_str() );
+            }
+        }
+
+        double a = -5, b = 5;
+        bool ok = false;
+        StringParser parser;
+        std::vector<std::vector<double>> roots;
+        for(const auto equation : equations)
+        {
+            QString eq(solveEquation(equation.toStdString()).c_str());
+            qDebug() << equation << "\n";
+            std::vector<double> xArr;
+            for (double i = a; i <= b; i += 0.001)
+                xArr.emplace_back(i);
+            parser.setDataX(xArr);
+            std::vector<double> yArr = parser.parseExpression(equation, 2);
+
+            double eps = 1e-3;
+            std::vector<double> equationRoots;
+            for (std::size_t i = 0; i < xArr.size(); ++i) {
+                if (std::abs(yArr.at(i)) < eps) {
+                    equationRoots.push_back(xArr.at(i));
+                    ok = true;
+                }
+            }
+
+            if(!ok)
+            {
+                setEquationsResult( "Корни не найдены." );
+                return;
+            }
+
+            roots.push_back( equationRoots );
+            ok = false;
+        }
+
+
+        std::stringstream ss;
+        bool isFirst = true;
+
+        for (const auto& innerVector : roots) {
+            if (!isFirst) {
+                ss << "; ";
+            }
+            ss << "[";
+            for (double value : innerVector) {
+                ss << std::fixed << std::setprecision(3) << value << ", ";
+            }
+            ss.seekp(-2, std::ios_base::end);
+            ss << "]";
+
+            isFirst = false;
+        }
+
+        setEquationsResult( QString(ss.str().c_str()) );
+    }
+}
+
+void LayoutInitializer::setEquationsResult( const QString &result )
 {
     widgets->eqResult->setText( result );
 }
@@ -466,4 +563,15 @@ void LayoutInitializer::hideButtonsWidget()
     {
         widgets->buttonsWidget->hide();
     }
+}
+
+void LayoutInitializer::containsNonLinearData( const bool& nl )
+{
+    widgets->nonLinear = nl;
+}
+
+void LayoutInitializer::calculateDiffError(const QVector<double> &y1, const QVector<double> &y2)
+{
+    widgets->error->clear();
+    widgets->error->insert( QString::asprintf( "%lf", MathUtils::calculateAverageError( y1, y2 ) ) );
 }
