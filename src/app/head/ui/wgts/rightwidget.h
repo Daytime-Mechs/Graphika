@@ -32,6 +32,7 @@ private:
     std::string area; ///< area of ​​the trapezoid under the curve.
     QString currentLegend;
     QString functionText;
+    QString eqSysText;
     GraphBar* graphBar;
 
     int graphBarWidth, graph2dHeight, graph3dHeight;;
@@ -134,7 +135,7 @@ public:
      * \param data: map of equations arguments.
      * \param sender: laes_solver module with specific method.
      */
-    void sysSolve( QVector<QVector<double>>& data, Sender& sender );
+    void sysSolve( const QVector<QVector<double>>& data, const Sender& sender );
 
     void checkoutAxeses( void );
 
@@ -220,6 +221,8 @@ public slots:
 
     void hideBarButtons( const bool& hide );
 
+    void acceptNonLinearSys( const QString& sys );
+
 signals:
     /*!
      * \brief errorOccured: error mesage sender signal for leftWidget object.
@@ -256,7 +259,10 @@ signals:
      * \param result: intersection points.
      */
     void readyToSendSysResult( const QString &result );
+
     void readyToSendNonLinearSysResult( const QVector<double> &result );
+
+    void calculateError( const QVector<double>& y1, const QVector<double>& y2 );
 };
 
 #endif // RIGHTWIDGET_H

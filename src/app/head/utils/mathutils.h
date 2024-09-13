@@ -55,7 +55,7 @@ public:
      *
      * \return average error.
      */
-    static double calculateAverageError( std::vector<double>& X1, std::vector<double>& X2 ) noexcept;
+    static double calculateAverageError( const QVector<double>& X1, const QVector<double>& X2 ) noexcept;
 
     /*!
      * \brief formTheSystemOfEquations: forms the data structure from given data table.

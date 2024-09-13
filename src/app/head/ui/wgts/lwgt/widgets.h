@@ -89,6 +89,10 @@ public:
     QWidget* buttonsWidget;
     QWidget* equationsButtonsWidget;
 
+    std::vector<std::vector<double>> nonLinearSysResult;
+
+    bool nonLinear{ false };
+
     /*!
      * \brief Widgets: constructor with standard heir argument.
      *
@@ -133,6 +137,7 @@ public:
 
             derivativeLabel = new QLabel();
             averError = new QLabel();
+            error = new QLineEdit();
 
             oddsInputLabel = new QLabel();
             equationsTableWidget = new QTableWidget();

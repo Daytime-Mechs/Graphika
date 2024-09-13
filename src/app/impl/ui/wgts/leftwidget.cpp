@@ -124,6 +124,11 @@ void LeftWidget::connectLabels( SpecialBuffer& buffer )
     connect( functionLayout, &FunctionLayout::switchPlots, currentLayout, &LayoutInitializer::clearDataTable );
     connect( functionLayout, &FunctionLayout::switchPlots, currentLayout, &LayoutInitializer::clearTableButtons );
     connect( currentLayout->widgets->solve, &QPushButton::clicked, currentLayout, &LayoutInitializer::clearTableButtons );
+    connect( currentLayout, &LayoutInitializer::readyToSendNonLinearSys, this, [this]( const QString& sysText )
+        {
+            emit sendNonLinearSys( sysText );
+        }
+    );
 }
 
 void LeftWidget::applyProgrammerSettings(double min, double Ymin, double max, double Ymax, double minStep, double maxStep, double minNodes, double maxNodes, int decimals)

@@ -99,7 +99,10 @@ MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent )
     programmer = new ProgrammerDialog( this );
     connect( programmer, &ProgrammerDialog::settingsApplied, leftWidget, &LeftWidget::applyProgrammerSettings );
     connect( menubar, &MenuBar::currentMethodChanged, rightWidget, &RightWidget::updateLegend );
+    connect( menubar, &MenuBar::containsNonLinearData, leftWidget->currentLayout, &LayoutInitializer::containsNonLinearData );
+    connect( leftWidget, &LeftWidget::sendNonLinearSys, rightWidget, &RightWidget::acceptNonLinearSys );
     connect( leftWidget, &LeftWidget::functionTextChanged, rightWidget, &RightWidget::setFunctionText );
+    connect( rightWidget, &RightWidget::calculateError, leftWidget->currentLayout, &LayoutInitializer::calculateDiffError );
 }
 
 void MainWindow::openMenu( int index, pymodules::Modules module )

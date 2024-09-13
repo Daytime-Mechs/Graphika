@@ -50,8 +50,8 @@ void FunctionLayout::generateWidgets( Widgets& widgets )
     layout->setColumnStretch( 0, 2 );
 
     this->hideWidgets( widgets.derivativeExpressionInput, widgets.derivativeLabel,
-                       widgets.error, widgets.area, widgets.calculatedArea,
-                       widgets.modelLabel, widgets.model  );
+                      widgets.error, widgets.averError, widgets.area,
+                      widgets.calculatedArea, widgets.modelLabel, widgets.model  );
 
     hideFirstLayer();
     hideThirdDimensionalLayer();

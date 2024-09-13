@@ -95,6 +95,7 @@ signals:
     void switchToGL3DGraphBuilder( void );
     void switchToGraphBuilder( void );
     void functionTextChanged( const QString& functionText );
+    void sendNonLinearSys( const QString& sysText );
 };
 
 #endif // LEFTWIDGET_H
