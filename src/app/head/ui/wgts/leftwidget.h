@@ -91,13 +91,14 @@ public slots:
     void onEquationsTableEdited();
     void setNonLinearFlag( bool flag );
     void updateNonLinearSpinBoxes();
-
+    void acceptXYData( const QVector<double>& x, const QVector<double>& y );
 
 signals:
     void switchToGL3DGraphBuilder( void );
     void switchToGraphBuilder( void );
     void functionTextChanged( const QString& functionText );
     void sendNonLinearSys( const QString& sysText );
+    void buildFuncGraph( const QVector<double> &x, const QVector<double> &y );
 };
 
 #endif // LEFTWIDGET_H

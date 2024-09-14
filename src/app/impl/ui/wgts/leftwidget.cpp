@@ -129,6 +129,10 @@ void LeftWidget::connectLabels( SpecialBuffer& buffer )
             emit sendNonLinearSys( sysText );
         }
     );
+    connect( currentLayout, &LayoutInitializer::readyToDrawGraphsFromSys, this, [this](const QVector<double>& x, const QVector<double>& y)
+    {
+        emit acceptXYData( x, y );
+    });
 }
 
 void LeftWidget::applyProgrammerSettings(double min, double Ymin, double max, double Ymax, double minStep, double maxStep, double minNodes, double maxNodes, int decimals)
@@ -183,6 +187,11 @@ void LeftWidget::onEquationsTableEdited()
     QTimer::singleShot(2, equationsLayout, &EquationsLayout::updateEquationsButtonsPosition );
     equationsLayout->updateEquationsButtonsPosition();
 
+}
+
+void LeftWidget::acceptXYData(const QVector<double> &x, const QVector<double> &y)
+{
+    emit buildFuncGraph(x, y);
 }
 
 void LeftWidget::hideButtons()

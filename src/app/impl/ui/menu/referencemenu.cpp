@@ -27,7 +27,7 @@ QWidget* ReferenceMenu::invokeLicenseWidget( void ) noexcept
     wgt->resize( textEdit->width(), textEdit->width() );
     wgt->setWindowTitle( "Лицензия" );
     wgt->setFixedSize( wgt->size() );
-    wgt->setWindowIcon( QIcon( ":/toolbaricons/resources/logo.png" ) );
+    wgt->setWindowIcon( QIcon( ":/toolbaricons/resources/logo2.PNG" ) );
     wgt->show();
     return wgt;
 }
@@ -38,7 +38,7 @@ QWidget* ReferenceMenu::invokeAuthorsWidget( void ) noexcept
     QVBoxLayout* layout = new QVBoxLayout( wgt );
 
     QLabel* imgLabel = new QLabel;
-    QPixmap pixmap = QPixmap( ":/references/resources/authors.svg" );
+    QPixmap pixmap = QPixmap( ":/toolbaricons/resources/authors.PNG" );
     imgLabel->setPixmap( pixmap );
 
     layout->addWidget( imgLabel );
@@ -46,7 +46,7 @@ QWidget* ReferenceMenu::invokeAuthorsWidget( void ) noexcept
     wgt->setLayout( layout );
     wgt->setWindowTitle( "Разработчики" );
     wgt->setFixedSize( pixmap.size() );
-    wgt->setWindowIcon( QIcon( ":/toolbaricons/resources/logo.png" ) );
+    wgt->setWindowIcon( QIcon( ":/toolbaricons/resources/logo2.PNG" ) );
     wgt->show();
     return wgt;
 }
@@ -70,7 +70,7 @@ QWidget* ReferenceMenu::invokeAboutWidget( void ) noexcept
     wgt->setWindowTitle( "Руководство пользователя" );
     wgt->resize( pixmap.width(), pixmap.width() / 1.5 );
     wgt->setFixedSize( wgt->size() );
-    wgt->setWindowIcon( QIcon( ":/toolbaricons/resources/logo.png" ) );
+    wgt->setWindowIcon( QIcon( ":/toolbaricons/resources/logo2.PNG" ) );
     wgt->show();
     return wgt;
 }
