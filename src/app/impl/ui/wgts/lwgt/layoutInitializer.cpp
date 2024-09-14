@@ -521,23 +521,18 @@ void LayoutInitializer::onSolveEquationsButtonClicked( void )
             }
         }
 
-        double a = 0, b = 2;
-        bool ok = false;
         StringParser parser;
         std::vector<std::vector<double>> roots;
         std::vector<std::vector<double>> allRoots;
-        bool firstIt = true;
-
         std::vector<double> xArr;
 
         //TODO: здесь у нас как раз должны быть подставлены макросы Мин Макс Шаг
-        for (double i = a; i <= b; i += 0.5)
+        for (double i = widgets->nonLinearXMin->value(); i <= widgets->nonLinearXMax->value(); i += widgets->nonLinearStep->value())
             xArr.emplace_back(i);
 
-        for(const auto equation : equations)
+        for(const auto& equation : equations)
         {
             QString eq(solveEquation(equation.toStdString()).c_str());
-            qDebug() << equation << "\n";
 
             parser.setDataX(xArr);
             std::vector<double> yArr = parser.parseExpression(equation, 2);
@@ -546,8 +541,6 @@ void LayoutInitializer::onSolveEquationsButtonClicked( void )
             emit readyToDrawGraphsFromSys(_x, _y);
             allRoots.push_back(yArr);
         }
-
-        qDebug() << "all: " << allRoots << "\n";
 
         std::vector<double> res;
         if(allRoots.size() > 1 && containsCommonElements(allRoots, xArr, res))

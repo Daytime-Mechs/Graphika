@@ -339,9 +339,10 @@ void RightWidget::differentiationSolve( SpecialBuffer& buffer, const QVector<dou
     std::vector<double> second;
     second.assign(buffer.dy.begin(), buffer.dy.end());
 
-    double diffError = MathUtils::calculateAverageError(first, second);
-    qDebug() << "Средняя погрешность : " << diffError;
-    emit calculateError( resultY, y );
+    auto dy1 = QVector<double>(first.begin(), first.end());
+    auto dy2 = QVector<double>(second.begin(), second.end());
+
+    emit calculateError( dy1, dy2 );
 
     printDerivationGraph( resultX, resultY, sender, nullptr );
 }
