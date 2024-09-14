@@ -93,6 +93,9 @@ public:
 
     bool nonLinear{ false };
 
+    QDoubleSpinBox* nonLinearXMin;
+    QDoubleSpinBox* nonLinearXMax;
+
     /*!
      * \brief Widgets: constructor with standard heir argument.
      *
@@ -147,6 +150,8 @@ public:
             eqResult = new QLineEdit();
             resultDescription = new QLabel();
             description = new QLineEdit();
+            nonLinearXMin = new QDoubleSpinBox( );
+            nonLinearXMax = new QDoubleSpinBox( );
         } // Переменные элементы
 
         derivativeExpressionInput = new QLineEdit( this );
@@ -196,6 +201,10 @@ private:
         step->setRange( 0.01, 10.0 );
         step->setSingleStep( 0.1 );
         nodes->setRange( 2.0, 1000.0 );
+        nonLinearXMin->setRange( -100.0, 100.0 );
+        nonLinearXMin->setSingleStep( 0.01 );
+        nonLinearXMax->setRange( -100.0, 100.0 );
+        nonLinearXMax->setSingleStep( 0.01 );
     }
 
 signals:

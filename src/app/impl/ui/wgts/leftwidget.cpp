@@ -195,3 +195,16 @@ void LeftWidget::hideButtons()
         }
     }
 }
+
+void LeftWidget::setNonLinearFlag( bool flag )
+{
+    equationsLayout->setNonLinearFlag( flag );
+}
+
+void LeftWidget::updateNonLinearSpinBoxes()
+{
+    if (currentLayout == equationsLayout)
+    {
+        equationsLayout->updateNonLinearSpinBoxes();
+    }
+}

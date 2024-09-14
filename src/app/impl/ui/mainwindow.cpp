@@ -103,6 +103,8 @@ MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent )
     connect( leftWidget, &LeftWidget::sendNonLinearSys, rightWidget, &RightWidget::acceptNonLinearSys );
     connect( leftWidget, &LeftWidget::functionTextChanged, rightWidget, &RightWidget::setFunctionText );
     connect( rightWidget, &RightWidget::calculateError, leftWidget->currentLayout, &LayoutInitializer::calculateDiffError );
+    connect( menubar, &MenuBar::containsNonLinearData, leftWidget, &LeftWidget::setNonLinearFlag );
+    connect(menubar, &MenuBar::containsNonLinearData, leftWidget, &LeftWidget::updateNonLinearSpinBoxes);
 }
 
 void MainWindow::openMenu( int index, pymodules::Modules module )

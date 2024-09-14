@@ -18,6 +18,8 @@ void EquationsLayout::generateWidgets( Widgets& widgets )
     widgets.clearEquationsTable->setText( "Очистить Таблицу" );
     widgets.resultOfEquations->setText( "Результат вычислений: " );
     widgets.resultDescription->setText( "Описание: " );
+    widgets.nonLinearXMin->setToolTip( "Минимальное значение х:" );
+    widgets.nonLinearXMax->setToolTip( "Максимальное значение х:" );
 
     layout->addWidget( widgets.oddsInputLabel, 0, 0 );
     layout->addWidget( widgets.equationsTableWidget, 1, 0, 1, 2 );
@@ -27,6 +29,12 @@ void EquationsLayout::generateWidgets( Widgets& widgets )
     layout->addWidget( widgets.eqResult, 4, 0 );
     layout->addWidget( widgets.resultDescription, 5, 0 );
     layout->addWidget( widgets.description, 6, 0 );
+
+    if (nonLinearFlag)
+    {
+        layout->addWidget( widgets.nonLinearXMin, 7, 0);
+        layout->addWidget( widgets.nonLinearXMax, 8, 0);
+    }
 
     // ВРЕМЕННО ЗАКРОЕМ ДОСТУП К ДАННЫМ ПУНКТАМ
     {
@@ -131,4 +139,31 @@ void EquationsLayout::hideEquationsButtonsWidget()
 QGridLayout *EquationsLayout::get()
 {
     return layout;
+}
+
+void EquationsLayout::setNonLinearFlag( bool flag )
+{
+    nonLinearFlag = flag;
+}
+
+void EquationsLayout::updateNonLinearSpinBoxes()
+{
+    if (nonLinearFlag)
+    {
+        if (!layout->indexOf(widgets->nonLinearXMin) != -1)
+        {
+            layout->addWidget( widgets->nonLinearXMin, 7, 0);
+            layout->addWidget( widgets->nonLinearXMax, 8, 0);
+        }
+        widgets->nonLinearXMin->show();
+        widgets->nonLinearXMax->show();
+    }
+    else
+    {
+        if (layout->indexOf(widgets->nonLinearXMin) != -1)
+        {
+            widgets->nonLinearXMin->hide();
+            widgets->nonLinearXMax->hide();
+        }
+    }
 }

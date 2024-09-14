@@ -23,6 +23,7 @@ class EquationsLayout : public LayoutInitializer
     Q_OBJECT
 private:
     QGridLayout* layout; ///< a grid layout for widgets.
+    bool nonLinearFlag = false;
 public:
     /*!
      * standard class-destructor.
@@ -48,6 +49,8 @@ public slots:
     void onAddEquationRowButtonClicked();
     void onRemoveEquationRowButtonClicked();
     void hideEquationsButtonsWidget();
+    void setNonLinearFlag(bool flag);
+    void updateNonLinearSpinBoxes();
 
 signals:
     void equationsTableEdited();
