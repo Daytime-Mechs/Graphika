@@ -12,7 +12,7 @@ MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent )
     setMinimumSize( 640, 380 );
     setMaximumSize( QWIDGETSIZE_MAX, QWIDGETSIZE_MAX );
     setWindowTitle( "Graphika" );
-    setWindowIcon( QIcon( ":/toolbaricons/resources/logo.PNG" ) );
+    setWindowIcon( QIcon( ":/toolbaricons/resources/logo2.PNG" ) );
 
     menu = new Menu( this );
     setMenuBar( menu->getMenu() );
