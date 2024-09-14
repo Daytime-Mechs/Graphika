@@ -113,6 +113,15 @@ void RightWidget::printGraph( SpecialBuffer& buffer, Sender& sender, LogList* lo
     }
 }
 
+void RightWidget::printFuncGraph( const QVector<double>& x, const QVector<double>& y)
+{
+    checkoutAxeses();
+
+    graphBuilder->graph2d->replot();
+    std::optional<QCustomPlot*> graph = graphBuilder->PaintG( x, y, functionText, true, false, false, z );
+
+}
+
 void RightWidget::printDerivationGraph( const QVector<double>& x, const QVector<double>& y, Sender& sender, LogList* logList )
 {
     graphBuilder->graph2d->replot();

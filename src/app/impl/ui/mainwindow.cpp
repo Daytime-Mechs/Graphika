@@ -12,7 +12,7 @@ MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent )
     setMinimumSize( 640, 380 );
     setMaximumSize( QWIDGETSIZE_MAX, QWIDGETSIZE_MAX );
     setWindowTitle( "Graphika" );
-    setWindowIcon( QIcon( ":/toolbaricons/resources/logo.png" ) );
+    setWindowIcon( QIcon( ":/toolbaricons/resources/logo.PNG" ) );
 
     menu = new Menu( this );
     setMenuBar( menu->getMenu() );
@@ -47,6 +47,7 @@ MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent )
 
     connect( leftWidget, &LeftWidget::switchToGraphBuilder, rightWidget->graphBuilder, &GraphBuilder::switchToGraphBuilder );
     connect( leftWidget, &LeftWidget::switchToGL3DGraphBuilder, rightWidget->graphBuilder, &GraphBuilder::switchToGL3DGraphBuilder );
+    connect( leftWidget, &LeftWidget::buildFuncGraph, rightWidget, &RightWidget::printFuncGraph );
 
     centralwidget->setLayout( layout );
     setCentralWidget( centralwidget );
@@ -74,8 +75,6 @@ MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent )
 
     scrollArea->setWidget( scrollContentWidget );
     layout->addWidget( scrollArea, 0, 0 );
-
-    //connect( rightWidget->graphBuilder, &GraphBuilder::couldSavePlotAsImage, this, &MainWindow::couldSavePlotAsImage );
 
     menuSlots.insert( menubar->actions().at( 0 ), [ this ]()
                      { openMenu( 0, pymodules::Modules::NIL ); } );
@@ -163,6 +162,9 @@ void MainWindow::draw( void )
         break;
     case pymodules::Modules::INTEGRATION:
         calculateIntegral();
+        break;
+    case pymodules::Modules::EQUATIONS:
+        printFunctionGraph();
         break;
     default:
         break;
