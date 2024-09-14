@@ -24,6 +24,7 @@
         <file>resources/reddot.png</file>
         <file>resources/emptypng.png</file>
         <file>resources/logo.PNG</file>
+        <file>resources/logo2.PNG</file>
     </qresource>
     <qresource prefix="/leftwidget">
         <file>resources/plus-icon.png</file>
