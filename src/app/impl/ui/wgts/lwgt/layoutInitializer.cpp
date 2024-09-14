@@ -1,5 +1,4 @@
 #include "layoutInitializer.h"
-#include <QDebug>
 
 void LayoutInitializer::onInputTextChanged( const QString& text )
 {
@@ -162,7 +161,7 @@ void LayoutInitializer::hideFirstLayer( void )
 
     widgets->nodes->hide();
     widgets->nodesLabel->hide();
-    widgets->error->hide();
+    //widgets->error->hide();
     widgets->calculatedArea->hide();
     widgets->area->hide();
 
@@ -180,7 +179,7 @@ void LayoutInitializer::hideSecondLayer( void )
 
     widgets->stepLabel->hide();
     widgets->step->hide();
-    widgets->error->hide();
+    //widgets->error->hide();
     widgets->calculatedArea->hide();
     widgets->area->hide();
 
@@ -419,33 +418,157 @@ void LayoutInitializer::acceptData( const QString& model, const double a, const 
     emit readyToDraw( x, y );
 }
 
-void LayoutInitializer::onSolveEquationsButtonClicked( void )
-{
-    for( int row{}; row < widgets->equationsTableWidget->rowCount(); ++row )
-    {
-        QTableWidgetItem* firstColumnItem = widgets->equationsTableWidget->item( row, 0 );
-        QTableWidgetItem* secondColumnItem = widgets->equationsTableWidget->item( row, 1 );
+std::string solveEquation(const std::string& equation) {
+    size_t equalPos = equation.find('=');
 
-        if( firstColumnItem == nullptr || secondColumnItem == nullptr )
-        {
-            qDebug() << "There is some blank labels\n";
-            continue;
-        }
-
-        QString firstCol = firstColumnItem->text();
-        QString secondCol = secondColumnItem->text();
-
-        if( !ExpressionValidator::validateTableRow( firstCol, secondCol ) )
-        {
-            qDebug() << "ERROR OF TYPING\n";
-            return;
-        }
+    std::string expression = equation.substr(0, equalPos);
+    std::string constStr = equation.substr(equalPos + 1);
+    char* endPtr;
+    double constant = std::strtod(constStr.c_str(), &endPtr);
+    if (endPtr == constStr.c_str()) {
+        return equation;
     }
-    auto data = MathUtils::formTheSystemOfEquations( *widgets->equationsTableWidget );
-    emit readyToSendEquationsData( data );
+    char sign = constant >= 0 ? '+' : '-';
+    sign = sign == '+' ? '-' : '+';
+    std::string result = expression + sign + " " + std::to_string(std::abs(constant));
+
+    return result;
 }
 
-void LayoutInitializer::setEquationsResult(const QString &result)
+template <typename T>
+std::size_t findElementIndex(const std::vector<T>& vec, const T& element) {
+    auto it = std::find(vec.begin(), vec.end(), element);
+    if (it == vec.end()) {
+        return std::numeric_limits<std::size_t>::max(); // Элемент не найден
+    }
+    return std::distance(vec.begin(), it);
+}
+
+bool containsCommonElements(const std::vector<std::vector<double>>& data, const std::vector<double>& X, std::vector<double>& res)
+{
+    if (data.empty() || data[0].empty()) {
+        return false;
+    }
+
+    for (double commonElement : data[0]) {
+        bool allContainCommon = true;
+        for (size_t i = 1; i < data.size(); ++i) {
+            bool found = false;
+            for (double x : data[i]) {
+                if (x == commonElement && findElementIndex(X, x) == findElementIndex(data[i], x)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                allContainCommon = false;
+                break;
+            }
+        }
+        if (allContainCommon) {
+            res.push_back(commonElement);
+            qDebug() << "get: " << commonElement << "\n";
+        }
+    }
+
+    if(res.empty()) return false;
+    return true;
+}
+
+void LayoutInitializer::onSolveEquationsButtonClicked( void )
+{
+    int rowCount = widgets->equationsTableWidget->rowCount();
+    if( !widgets->nonLinear )
+    {
+        for( int row{}; row < rowCount; ++row )
+        {
+            QTableWidgetItem* firstColumnItem = widgets->equationsTableWidget->item( row, 0 );
+            QTableWidgetItem* secondColumnItem = widgets->equationsTableWidget->item( row, 1 );
+
+            if( firstColumnItem == nullptr || secondColumnItem == nullptr )
+            {
+                qDebug() << "There is some blank labels\n";
+                continue;
+            }
+
+            QString firstCol = firstColumnItem->text();
+            QString secondCol = secondColumnItem->text();
+
+            if( !ExpressionValidator::validateTableRow( firstCol, secondCol ) )
+            {
+                qDebug() << "ERROR OF TYPING\n";
+                return;
+            }
+        }
+        auto data = MathUtils::formTheSystemOfEquations( *widgets->equationsTableWidget );
+        emit readyToSendEquationsData( data );
+    }
+    else
+    {
+        std::vector<QString> equations;
+        for( int row = 0; row < rowCount; ++row )
+        {
+            if( !widgets->tableWidget->rowAt( row ) ) break;
+            QTableWidgetItem* leftItem = widgets->equationsTableWidget->item( row, 0 );
+            QTableWidgetItem* rightItem = widgets->equationsTableWidget->item( row, 1 );
+
+            if( leftItem && rightItem )
+            {
+                QString leftPart = leftItem->text();
+                QString rightPart = rightItem->text();
+
+                equations.push_back( (solveEquation(leftPart.toStdString() + " = " + rightPart.toStdString())).c_str() );
+            }
+        }
+
+        double a = 0, b = 2;
+        bool ok = false;
+        StringParser parser;
+        std::vector<std::vector<double>> roots;
+        std::vector<std::vector<double>> allRoots;
+        bool firstIt = true;
+
+        std::vector<double> xArr;
+
+        //TODO: здесь у нас как раз должны быть подставлены макросы Мин Макс Шаг
+        for (double i = a; i <= b; i += 0.5)
+            xArr.emplace_back(i);
+
+        for(const auto equation : equations)
+        {
+            QString eq(solveEquation(equation.toStdString()).c_str());
+            qDebug() << equation << "\n";
+
+            parser.setDataX(xArr);
+            std::vector<double> yArr = parser.parseExpression(equation, 2);
+            QVector<double> _x = QVector<double>(xArr.begin(), xArr.end());
+            QVector<double> _y = QVector<double>(yArr.begin(), yArr.end());
+            emit readyToDrawGraphsFromSys(_x, _y);
+            allRoots.push_back(yArr);
+        }
+
+        qDebug() << "all: " << allRoots << "\n";
+
+        std::vector<double> res;
+        if(allRoots.size() > 1 && containsCommonElements(allRoots, xArr, res))
+        {
+            std::stringstream ss;
+            for (size_t i = 0; i < res.size(); ++i) {
+                if (i > 0) {
+                    ss << ", ";
+                }
+                ss << res[i];
+            }
+            setEquationsResult(QString::fromStdString(ss.str()));
+        }
+        else
+        {
+            setEquationsResult("Решение не найдено.");
+        }
+    }
+}
+
+void LayoutInitializer::setEquationsResult( const QString &result )
 {
     widgets->eqResult->setText( result );
 }
@@ -466,4 +589,20 @@ void LayoutInitializer::hideButtonsWidget()
     {
         widgets->buttonsWidget->hide();
     }
+}
+
+void LayoutInitializer::containsNonLinearData( const bool& nl )
+{
+    widgets->nonLinear = nl;
+    if(widgets->nonLinear)
+    {
+        widgets->oddsInputLabel->setText( QString::asprintf( "Вы находитесь в режиме поиска корней в системе нелинейных уравнений,\nгде слева: f(x), а справа константа.\nВ левую часть таблицы вводите мат. выражения вида f(x), а слева - целочисленную постоянную.\nПарсер математического выражения преобразует входные\nданные следующим образом: f(x) +/- C = 0 и найдет корни." ) );
+    }
+    else widgets->oddsInputLabel->setText( QString::asprintf( "Введите через пробел коэффициенты \nлинейных уравнений и свободный член" ) );
+}
+
+void LayoutInitializer::calculateDiffError(const QVector<double> &y1, const QVector<double> &y2)
+{
+    widgets->error->clear();
+    widgets->error->insert( QString::asprintf( "%lf", MathUtils::calculateAverageError( y1, y2 ) ) );
 }

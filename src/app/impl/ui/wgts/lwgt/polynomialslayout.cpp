@@ -36,7 +36,7 @@ void PolynomialsLayout::generateWidgets( Widgets& widgets )
     layout->setColumnStretch( 0, 2 );
 
     this->hideWidgets( widgets.derivativeExpressionInput, widgets.derivativeLabel,
-                      widgets.error, widgets.area, widgets.calculatedArea );
+                      widgets.error, widgets.averError, widgets.area, widgets.calculatedArea );
     this->widgets = &widgets;
     hideFirstLayer();
 }

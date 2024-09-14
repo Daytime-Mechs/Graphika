@@ -320,29 +320,27 @@ QVector<double> PythonConveyor::sendDataToSolveNonLinearSys( const QString& pyth
         return QVector<double>();
     }
     PyObject* args = PyTuple_New( 1 );
-    PyObject* pyString = PyUnicode_FromString( nonLinearSys.toStdString().c_str() );
+    PyObject* pyString = PyUnicode_FromString( QString(nonLinearSys).toStdString().c_str() );
     PyTuple_SetItem( args, 0, pyString );
     PyObject* pyResult = callPythonFunction( function, args, functionName );
     QVector<double> resultList;
-    if ( pyResult )
-    {
-        if ( PyTuple_Check( pyResult ) )
-        {
-            int size = PyTuple_Size( pyResult );
-            for ( int i = 0; i < size; ++i )
-            {
-                PyObject* item = PyTuple_GetItem( pyResult, i );
-                double value = PyFloat_AsDouble( item );
-                resultList.append( value );
+    if (pyResult) {
+        if (PyTuple_Check(pyResult)) {
+            int size = PyTuple_Size(pyResult);
+            for (int i = 0; i < size; ++i) {
+                PyObject* item = PyTuple_GetItem(pyResult, i);
+                double value = PyFloat_AsDouble(item);
+                resultList.append(value);
             }
         }
-        Py_DECREF( pyResult );
+        Py_DECREF(pyResult);
     }
     Py_DECREF( args );
     Py_DECREF( function );
     Py_Finalize();
     return resultList;
 }
+
 
 /*!
  * \brief PythonConveyor::initPythonInterpreter: Initializes the Python interpreter and executes the Python script.

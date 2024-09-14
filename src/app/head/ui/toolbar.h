@@ -60,6 +60,7 @@ public:
 
 signals:
     void currentMethodChanged( const QString& methodName );
+    bool containsNonLinearData( const bool& nonLinear );
 
 protected:
     /*!

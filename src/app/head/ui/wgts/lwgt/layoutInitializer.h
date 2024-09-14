@@ -14,11 +14,16 @@
 #include <QTextEdit>
 #include <QTextDocument>
 #include <buffer.h>
+#include <QString>
+#include <QDebug>
+#include <QString>
+#include <iomanip>
+#include <unordered_set>
+#include "mathutils.h"
+#include "stringparser.h"
 #include "widgets.h"
 #include "mathutils.h"
-//#include <QWebEngineView>
-//#include <QWebEnginePage>
-//#include <QWebEngineSettings>
+
 
 class MathWidget;
 
@@ -194,6 +199,10 @@ public slots:
     void clearTableButtons();
     void hideButtonsWidget();
 
+    void containsNonLinearData( const bool& nl );
+
+    void calculateDiffError( const QVector<double>& y1, const QVector<double>& y2 );
+
 signals:
     /*!
      * \brief validExpression: is given math expression was typed currectly.
@@ -213,6 +222,7 @@ signals:
      * \param y: given y data variables.
      */
     void readyToDraw( std::vector<double>& x, std::vector<double>& y );
+    void readyToDrawGraphsFromSys( const QVector<double>& x, const QVector<double>& y );
 
     /*!
      * \brief readyToSendEquationsData: emits when called when the program is ready to transfer conveniently formed data from the table.
@@ -220,6 +230,8 @@ signals:
      * \param data: given formed data from table to vevctor of real number vectors.
      */
     void readyToSendEquationsData( QVector<QVector<double>>& data );
+
+    void readyToSendNonLinearSys( const QString& sys );
 };
 
 #endif

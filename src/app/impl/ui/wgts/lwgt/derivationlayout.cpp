@@ -23,13 +23,13 @@ void DerivationLayout::generateWidgets( Widgets& widgets )
     layout->addWidget( widgets.buildGraph, 9, 0 );
     layout->addWidget( widgets.manualTableInput, 9, 1 );
     layout->addWidget( widgets.tableWidget, 10, 0, 1, 2 );
-    layout->addWidget( widgets.averError, layout->rowCount(), 0 );
-    layout->addWidget( widgets.error = new QLineEdit( this ), layout->rowCount() - 1, 1 );
     layout->addWidget( widgets.calculatedArea = new QLabel( "Вычисленная площадь: ", this ),
                       layout->rowCount(), 0 );
     layout->addWidget( widgets.area = new QLineEdit( this ), layout->rowCount() - 1, 1 );
     layout->addWidget( widgets.modelLabel, layout->rowCount(), 0 );
     layout->addWidget( widgets.model, layout->rowCount() - 1, 1, 1, 10 );
+    layout->addWidget( widgets.averError, layout->rowCount(), 0 );
+    layout->addWidget( widgets.error = new QLineEdit( this ), layout->rowCount() - 1, 1 );
 
     layout->setColumnStretch( 1, 10 );
     layout->setColumnStretch( 0, 2 );
@@ -41,19 +41,13 @@ void DerivationLayout::generateWidgets( Widgets& widgets )
     auto item = new QTableWidgetItem( "Y'" );
     widgets.tableWidget->setHorizontalHeaderItem( currentColumnCount, item );
 
-    widgets.averError->setText( "Средняя погрешность: " );
-    widgets.averError->show();
-    widgets.error->show();
-    // УБРАТЬ ПРИ АКТИВАЦИИ
-    {
-        widgets.error->setDisabled( true );
-        widgets.averError->setDisabled( true );
-    }
-
     this->widgets = &widgets;
     this->hideWidgets( widgets.area, widgets.calculatedArea, widgets.modelLabel, widgets.model );
     derivativeLabel = true;
     hideFirstLayer();
+    widgets.averError->setText( "Средняя погрешность: " );
+    widgets.averError->show();
+    widgets.error->show();
 }
 
 QGridLayout *DerivationLayout::get()

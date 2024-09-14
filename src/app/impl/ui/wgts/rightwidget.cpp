@@ -58,6 +58,15 @@ void RightWidget::hideBarButtons( const bool& hide )
     graphBar->actions().at( 7 )->setDisabled( hide );
 }
 
+void RightWidget::acceptNonLinearSys( const QString& sys )
+{
+    qDebug() << "acceptNonLinearSys\n";
+    eqSysText = sys;
+    auto xy = new QVector<QVector<double>>();
+    auto send = new Sender();
+    sysSolve( *xy, *send );
+}
+
 void RightWidget::printGraph( SpecialBuffer& buffer, Sender& sender, LogList* logList )
 {
     x = buffer.x;
@@ -102,6 +111,15 @@ void RightWidget::printGraph( SpecialBuffer& buffer, Sender& sender, LogList* lo
         item.gbd = gb;
         logList->addItem(item);
     }
+}
+
+void RightWidget::printFuncGraph( const QVector<double>& x, const QVector<double>& y)
+{
+    checkoutAxeses();
+
+    graphBuilder->graph2d->replot();
+    std::optional<QCustomPlot*> graph = graphBuilder->PaintG( x, y, functionText, true, false, false, z );
+
 }
 
 void RightWidget::printDerivationGraph( const QVector<double>& x, const QVector<double>& y, Sender& sender, LogList* logList )
@@ -316,7 +334,6 @@ void RightWidget::differentiationSolve( SpecialBuffer& buffer, const QVector<dou
     QVector<double> resultX = diffResult.first;
     QVector<double> resultY = diffResult.second;
 
-
     std::vector<double> first;
     first.assign(resultY.begin(), resultY.end());
     std::vector<double> second;
@@ -324,12 +341,25 @@ void RightWidget::differentiationSolve( SpecialBuffer& buffer, const QVector<dou
 
     double diffError = MathUtils::calculateAverageError(first, second);
     qDebug() << "Средняя погрешность : " << diffError;
+    emit calculateError( resultY, y );
 
     printDerivationGraph( resultX, resultY, sender, nullptr );
 }
 
-void RightWidget::sysSolve( QVector<QVector<double>>& data, Sender &sender )
+void RightWidget::sysSolve( const QVector<QVector<double>>& data, const Sender& sender )
 {
+    if( eqSysText.size() > 2 )
+    {
+        QVector<double> resultSysVector = conveyor->sendDataToSolveNonLinearSys(":/pyFiles/resources/pymodules/nonlinear_laes_solver.py", "solve_nonlinear_system", eqSysText );
+        qDebug() << "getting vector: ";
+        for( const auto& e : resultSysVector )
+        {
+            qDebug() << e << "\n";
+        }
+        eqSysText.clear();
+        return;
+    }
+
     QString resultSysStr = conveyor->sendDataToSolveSys( sender.moduleName, sender.functionName, data );
     emit readyToSendSysResult( resultSysStr );
     qDebug() << resultSysStr;

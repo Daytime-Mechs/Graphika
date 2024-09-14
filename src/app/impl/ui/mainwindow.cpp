@@ -12,7 +12,7 @@ MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent )
     setMinimumSize( 640, 380 );
     setMaximumSize( QWIDGETSIZE_MAX, QWIDGETSIZE_MAX );
     setWindowTitle( "Graphika" );
-    setWindowIcon( QIcon( ":/toolbaricons/resources/logo.png" ) );
+    setWindowIcon( QIcon( ":/toolbaricons/resources/logo2.PNG" ) );
 
     menu = new Menu( this );
     setMenuBar( menu->getMenu() );
@@ -47,6 +47,7 @@ MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent )
 
     connect( leftWidget, &LeftWidget::switchToGraphBuilder, rightWidget->graphBuilder, &GraphBuilder::switchToGraphBuilder );
     connect( leftWidget, &LeftWidget::switchToGL3DGraphBuilder, rightWidget->graphBuilder, &GraphBuilder::switchToGL3DGraphBuilder );
+    connect( leftWidget, &LeftWidget::buildFuncGraph, rightWidget, &RightWidget::printFuncGraph );
 
     centralwidget->setLayout( layout );
     setCentralWidget( centralwidget );
@@ -75,8 +76,6 @@ MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent )
     scrollArea->setWidget( scrollContentWidget );
     layout->addWidget( scrollArea, 0, 0 );
 
-    //connect( rightWidget->graphBuilder, &GraphBuilder::couldSavePlotAsImage, this, &MainWindow::couldSavePlotAsImage );
-
     menuSlots.insert( menubar->actions().at( 0 ), [ this ]()
                      { openMenu( 0, pymodules::Modules::NIL ); } );
     menuSlots.insert( menubar->actions().at( 1 ), [ this ]()
@@ -99,7 +98,12 @@ MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent )
     programmer = new ProgrammerDialog( this );
     connect( programmer, &ProgrammerDialog::settingsApplied, leftWidget, &LeftWidget::applyProgrammerSettings );
     connect( menubar, &MenuBar::currentMethodChanged, rightWidget, &RightWidget::updateLegend );
+    connect( menubar, &MenuBar::containsNonLinearData, leftWidget->currentLayout, &LayoutInitializer::containsNonLinearData );
+    connect( leftWidget, &LeftWidget::sendNonLinearSys, rightWidget, &RightWidget::acceptNonLinearSys );
     connect( leftWidget, &LeftWidget::functionTextChanged, rightWidget, &RightWidget::setFunctionText );
+    connect( rightWidget, &RightWidget::calculateError, leftWidget->currentLayout, &LayoutInitializer::calculateDiffError );
+    connect( menubar, &MenuBar::containsNonLinearData, leftWidget, &LeftWidget::setNonLinearFlag );
+    connect(menubar, &MenuBar::containsNonLinearData, leftWidget, &LeftWidget::updateNonLinearSpinBoxes);
 }
 
 void MainWindow::openMenu( int index, pymodules::Modules module )
@@ -160,6 +164,9 @@ void MainWindow::draw( void )
         break;
     case pymodules::Modules::INTEGRATION:
         calculateIntegral();
+        break;
+    case pymodules::Modules::EQUATIONS:
+        printFunctionGraph();
         break;
     default:
         break;
