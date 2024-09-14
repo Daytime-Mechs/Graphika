@@ -95,7 +95,11 @@ public:
 
     QDoubleSpinBox* nonLinearXMin;
     QDoubleSpinBox* nonLinearXMax;
+    QDoubleSpinBox* nonLinearStep;
 
+    QLabel* nonLinearXMinLabel;
+    QLabel* nonLinearXMaxLabel;
+    QLabel* nonLinearStepLabel;
     /*!
      * \brief Widgets: constructor with standard heir argument.
      *
@@ -152,6 +156,14 @@ public:
             description = new QLineEdit();
             nonLinearXMin = new QDoubleSpinBox( );
             nonLinearXMax = new QDoubleSpinBox( );
+            nonLinearStep = new QDoubleSpinBox( );
+
+            nonLinearXMinLabel = new QLabel( "X мин:" );
+            nonLinearXMinLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+            nonLinearXMaxLabel = new QLabel( "X макс:" );
+            nonLinearXMaxLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+            nonLinearStepLabel = new QLabel( "Шаг:" );
+            nonLinearStepLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         } // Переменные элементы
 
         derivativeExpressionInput = new QLineEdit( this );
@@ -205,6 +217,9 @@ private:
         nonLinearXMin->setSingleStep( 0.01 );
         nonLinearXMax->setRange( -100.0, 100.0 );
         nonLinearXMax->setSingleStep( 0.01 );
+        nonLinearStep->setRange(0.001, 1);
+        nonLinearStep->setSingleStep(0.001);
+        nonLinearStep->setDecimals(3);
     }
 
 signals:
