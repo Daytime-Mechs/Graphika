@@ -89,6 +89,8 @@ public slots:
     void applyProgrammerSettings( double min, double Ymin, double max, double Ymax, double minStep, double maxStep, double minNodes, double maxNodes, int decimals );
     void onTableEdited();
     void onEquationsTableEdited();
+    void setNonLinearFlag( bool flag );
+    void updateNonLinearSpinBoxes();
     void acceptXYData( const QVector<double>& x, const QVector<double>& y );
 
 signals:

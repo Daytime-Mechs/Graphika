@@ -19,14 +19,39 @@ void EquationsLayout::generateWidgets( Widgets& widgets )
     widgets.resultOfEquations->setText( "Результат вычислений: " );
     widgets.resultDescription->setText( "Описание: " );
 
-    layout->addWidget( widgets.oddsInputLabel, 0, 0 );
-    layout->addWidget( widgets.equationsTableWidget, 1, 0, 1, 2 );
-    layout->addWidget( widgets.solveEquations, 2, 0 );
-    layout->addWidget( widgets.clearEquationsTable, 2, 1 );
-    layout->addWidget( widgets.resultOfEquations, 3, 0 );
-    layout->addWidget( widgets.eqResult, 4, 0 );
-    layout->addWidget( widgets.resultDescription, 5, 0 );
-    layout->addWidget( widgets.description, 6, 0 );
+    if (nonLinearFlag)
+    {
+        layout->addWidget( widgets.oddsInputLabel, 0, 0 );
+        layout->addWidget( widgets.equationsTableWidget, 1, 0, 1, 2 );
+        layout->addWidget( widgets.nonLinearXMinLabel, 2, 0);
+        layout->addWidget( widgets.nonLinearXMin, 2, 1 );
+        layout->addWidget( widgets.nonLinearXMaxLabel, 3, 0);
+        layout->addWidget( widgets.nonLinearXMax, 3, 1 );
+        layout->addWidget( widgets.nonLinearStepLabel, 4, 0);
+        layout->addWidget( widgets.nonLinearStep, 4, 1 );
+        layout->addWidget( widgets.solveEquations, 5, 0 );
+        layout->addWidget( widgets.clearEquationsTable, 5, 1 );
+        layout->addWidget( widgets.resultOfEquations, 6, 0 );
+        layout->addWidget( widgets.eqResult, 7, 0 );
+        layout->addWidget( widgets.resultDescription, 8, 0 );
+        layout->addWidget( widgets.description, 9, 0 );
+
+        // Установить минимальную ширину для столбца 0
+        layout->setColumnMinimumWidth(0, 100);
+
+        // Установить растяжение для столбцов
+        layout->setColumnStretch(0, 1);
+        layout->setColumnStretch(1, 2);
+    } else {
+        layout->addWidget( widgets.oddsInputLabel, 0, 0 );
+        layout->addWidget( widgets.equationsTableWidget, 1, 0, 1, 2 );
+        layout->addWidget( widgets.solveEquations, 5, 0 );
+        layout->addWidget( widgets.clearEquationsTable, 5, 1 );
+        layout->addWidget( widgets.resultOfEquations, 6, 0 );
+        layout->addWidget( widgets.eqResult, 7, 0 );
+        layout->addWidget( widgets.resultDescription, 8, 0 );
+        layout->addWidget( widgets.description, 9, 0 );
+    }
 
     // ВРЕМЕННО ЗАКРОЕМ ДОСТУП К ДАННЫМ ПУНКТАМ
     {
@@ -131,4 +156,55 @@ void EquationsLayout::hideEquationsButtonsWidget()
 QGridLayout *EquationsLayout::get()
 {
     return layout;
+}
+
+void EquationsLayout::setNonLinearFlag( bool flag )
+{
+    nonLinearFlag = flag;
+}
+
+void EquationsLayout::updateNonLinearSpinBoxes()
+{
+    if (nonLinearFlag)
+    {
+        if (!layout->indexOf(widgets->nonLinearXMin) != -1)
+        {
+            layout->addWidget( widgets->nonLinearXMinLabel, 2, 0);
+            layout->addWidget( widgets->nonLinearXMin, 2, 1);
+            layout->addWidget( widgets->nonLinearXMaxLabel, 3, 0);
+            layout->addWidget( widgets->nonLinearXMax, 3, 1 );
+            layout->addWidget( widgets->nonLinearStepLabel, 4, 0);
+            layout->addWidget( widgets->nonLinearStep, 4, 1 );
+
+            // Установить минимальную ширину для столбца 0
+            layout->setColumnMinimumWidth(0, 100);
+
+            // Установить растяжение для столбцов
+            layout->setColumnStretch(0, 1);
+            layout->setColumnStretch(1, 2);
+        }
+        widgets->nonLinearXMinLabel->show();
+        widgets->nonLinearXMin->show();
+        widgets->nonLinearXMaxLabel->show();
+        widgets->nonLinearXMax->show();
+        widgets->nonLinearStepLabel->show();
+        widgets->nonLinearStep->show();
+    }
+    else
+    {
+        if (layout->indexOf(widgets->nonLinearXMin) != -1)
+        {
+            widgets->nonLinearXMinLabel->hide();
+            widgets->nonLinearXMin->hide();
+            widgets->nonLinearXMaxLabel->hide();
+            widgets->nonLinearXMax->hide();
+            widgets->nonLinearStepLabel->hide();
+            widgets->nonLinearStep->hide();
+
+            // Сбросить минимальную ширину и растяжение для столбцов
+            layout->setColumnMinimumWidth(0, 0);
+            layout->setColumnStretch(0, 0);
+            layout->setColumnStretch(1, 0);
+        }
+    }
 }
