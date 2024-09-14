@@ -1,10 +1,4 @@
 #include "layoutInitializer.h"
-#include <QDebug>
-#include <QString>
-#include <array>
-#include <iomanip>
-#include "mathutils.h"
-#include "stringparser.h"
 
 void LayoutInitializer::onInputTextChanged( const QString& text )
 {
@@ -441,6 +435,46 @@ std::string solveEquation(const std::string& equation) {
     return result;
 }
 
+template <typename T>
+std::size_t findElementIndex(const std::vector<T>& vec, const T& element) {
+    auto it = std::find(vec.begin(), vec.end(), element);
+    if (it == vec.end()) {
+        return std::numeric_limits<std::size_t>::max(); // Элемент не найден
+    }
+    return std::distance(vec.begin(), it);
+}
+
+bool containsCommonElements(const std::vector<std::vector<double>>& data, const std::vector<double>& X, std::vector<double>& res)
+{
+    if (data.empty() || data[0].empty()) {
+        return false;
+    }
+
+    for (double commonElement : data[0]) {
+        bool allContainCommon = true;
+        for (size_t i = 1; i < data.size(); ++i) {
+            bool found = false;
+            for (double x : data[i]) {
+                if (x == commonElement && findElementIndex(X, x) == findElementIndex(data[i], x)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                allContainCommon = false;
+                break;
+            }
+        }
+        if (allContainCommon) {
+            res.push_back(commonElement);
+            qDebug() << "get: " << commonElement << "\n";
+        }
+    }
+
+    if(res.empty()) return false;
+    return true;
+}
+
 void LayoutInitializer::onSolveEquationsButtonClicked( void )
 {
     int rowCount = widgets->equationsTableWidget->rowCount();
@@ -487,58 +521,50 @@ void LayoutInitializer::onSolveEquationsButtonClicked( void )
             }
         }
 
-        double a = -5, b = 5;
+        double a = 0, b = 2;
         bool ok = false;
         StringParser parser;
         std::vector<std::vector<double>> roots;
+        std::vector<std::vector<double>> allRoots;
+        bool firstIt = true;
+
+        std::vector<double> xArr;
+
+        //TODO: здесь у нас как раз должны быть подставлены макросы Мин Макс Шаг
+        for (double i = a; i <= b; i += 0.5)
+            xArr.emplace_back(i);
+
         for(const auto equation : equations)
         {
             QString eq(solveEquation(equation.toStdString()).c_str());
             qDebug() << equation << "\n";
-            std::vector<double> xArr;
-            for (double i = a; i <= b; i += 0.001)
-                xArr.emplace_back(i);
+
             parser.setDataX(xArr);
             std::vector<double> yArr = parser.parseExpression(equation, 2);
+            QVector<double> _x = QVector<double>(xArr.begin(), xArr.end());
+            QVector<double> _y = QVector<double>(yArr.begin(), yArr.end());
+            emit readyToDrawGraphsFromSys(_x, _y);
+            allRoots.push_back(yArr);
+        }
 
-            double eps = 1e-3;
-            std::vector<double> equationRoots;
-            for (std::size_t i = 0; i < xArr.size(); ++i) {
-                if (std::abs(yArr.at(i)) < eps) {
-                    equationRoots.push_back(xArr.at(i));
-                    ok = true;
+        qDebug() << "all: " << allRoots << "\n";
+
+        std::vector<double> res;
+        if(allRoots.size() > 1 && containsCommonElements(allRoots, xArr, res))
+        {
+            std::stringstream ss;
+            for (size_t i = 0; i < res.size(); ++i) {
+                if (i > 0) {
+                    ss << ", ";
                 }
+                ss << res[i];
             }
-
-            if(!ok)
-            {
-                setEquationsResult( "Корни не найдены." );
-                return;
-            }
-
-            roots.push_back( equationRoots );
-            ok = false;
+            setEquationsResult(QString::fromStdString(ss.str()));
         }
-
-
-        std::stringstream ss;
-        bool isFirst = true;
-
-        for (const auto& innerVector : roots) {
-            if (!isFirst) {
-                ss << "; ";
-            }
-            ss << "[";
-            for (double value : innerVector) {
-                ss << std::fixed << std::setprecision(3) << value << ", ";
-            }
-            ss.seekp(-2, std::ios_base::end);
-            ss << "]";
-
-            isFirst = false;
+        else
+        {
+            setEquationsResult("Решение не найдено.");
         }
-
-        setEquationsResult( QString(ss.str().c_str()) );
     }
 }
 
@@ -568,6 +594,11 @@ void LayoutInitializer::hideButtonsWidget()
 void LayoutInitializer::containsNonLinearData( const bool& nl )
 {
     widgets->nonLinear = nl;
+    if(widgets->nonLinear)
+    {
+        widgets->oddsInputLabel->setText( QString::asprintf( "Вы находитесь в режиме поиска корней в системе нелинейных уравнений,\nгде слева: f(x), а справа константа.\nВ левую часть таблицы вводите мат. выражения вида f(x), а слева - целочисленную постоянную.\nПарсер математического выражения преобразует входные\nданные следующим образом: f(x) +/- C = 0 и найдет корни." ) );
+    }
+    else widgets->oddsInputLabel->setText( QString::asprintf( "Введите через пробел коэффициенты \nлинейных уравнений и свободный член" ) );
 }
 
 void LayoutInitializer::calculateDiffError(const QVector<double> &y1, const QVector<double> &y2)

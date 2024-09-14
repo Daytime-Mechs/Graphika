@@ -192,6 +192,8 @@ public:
 
 public slots:
 
+    void printFuncGraph(const QVector<double> &x, const QVector<double> &y);
+
     /*!
      * \brief drawInterpolationGraph: draw points of interpolation from X|Y table and calculate curve by interpolation model.
      *

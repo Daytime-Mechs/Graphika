@@ -15,14 +15,15 @@
 #include <QTextDocument>
 #include <buffer.h>
 #include <QString>
+#include <QDebug>
+#include <QString>
+#include <iomanip>
+#include <unordered_set>
+#include "mathutils.h"
+#include "stringparser.h"
 #include "widgets.h"
 #include "mathutils.h"
 
-struct Equation {
-    std::vector<std::string> variables;
-    double constant;
-    double rhs;
-};
 
 class MathWidget;
 
@@ -221,6 +222,7 @@ signals:
      * \param y: given y data variables.
      */
     void readyToDraw( std::vector<double>& x, std::vector<double>& y );
+    void readyToDrawGraphsFromSys( const QVector<double>& x, const QVector<double>& y );
 
     /*!
      * \brief readyToSendEquationsData: emits when called when the program is ready to transfer conveniently formed data from the table.

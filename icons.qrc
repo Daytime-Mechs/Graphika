@@ -17,13 +17,13 @@
         <file>resources/integral.PNG</file>
         <file>resources/sysfunctions.PNG</file>
         <file>resources/unpinPlot.PNG</file>
-        <file>resources/logo.png</file>
         <file>resources/authors.PNG</file>
         <file>resources/rotateLegend.PNG</file>
         <file>resources/savePlotAsImage.png</file>
         <file>resources/about.PNG</file>
         <file>resources/reddot.png</file>
         <file>resources/emptypng.png</file>
+        <file>resources/logo.PNG</file>
     </qresource>
     <qresource prefix="/leftwidget">
         <file>resources/plus-icon.png</file>
