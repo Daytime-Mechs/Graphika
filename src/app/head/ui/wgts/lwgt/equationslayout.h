@@ -53,7 +53,7 @@ public slots:
     void updateNonLinearSpinBoxes( void );
 
 signals:
-    void equationsTableEdited() void ;
+    void equationsTableEdited( void );
 
 };
 
