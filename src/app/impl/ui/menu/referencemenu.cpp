@@ -1,5 +1,7 @@
 #include "referencemenu.h"
 
+#include <QScrollBar>
+
 QWidget* ReferenceMenu::invokeLicenseWidget( void ) noexcept
 {
     QTextEdit* textEdit = new QTextEdit;
@@ -54,24 +56,35 @@ QWidget* ReferenceMenu::invokeAuthorsWidget( void ) noexcept
 QWidget* ReferenceMenu::invokeAboutWidget( void ) noexcept
 {
     QWidget* wgt = new QWidget;
-    QVBoxLayout* layout = new QVBoxLayout( wgt );
+    QVBoxLayout* layout = new QVBoxLayout(wgt);
 
-    QLabel* imgLabel = new QLabel;
-    QPixmap pixmap = QPixmap( ":/references/resources/aboutSheet.jpg" );
-    imgLabel->setPixmap( pixmap );
+    QLabel* imgLabel1 = new QLabel;
+    QPixmap pixmap1(":/references/resources/doc2.png");
+    imgLabel1->setPixmap(pixmap1);
+
+    QLabel* imgLabel2 = new QLabel;
+    QPixmap pixmap2(":/references/resources/doc1.png");
+    imgLabel2->setPixmap(pixmap2);
 
     QScrollArea* scrollArea = new QScrollArea;
-    scrollArea->setBackgroundRole( QPalette::Dark );
-    scrollArea->setWidget( imgLabel );
+    scrollArea->setBackgroundRole(QPalette::Dark);
+    scrollArea->setWidget(imgLabel1);
 
-    layout->addWidget( scrollArea );
+    layout->addWidget(scrollArea);
 
-    wgt->setLayout( layout );
-    wgt->setWindowTitle( "Руководство пользователя" );
-    wgt->resize( pixmap.width(), pixmap.width() / 1.5 );
-    wgt->setFixedSize( wgt->size() );
-    wgt->setWindowIcon( QIcon( ":/toolbaricons/resources/logo2.PNG" ) );
+    wgt->setLayout(layout);
+    wgt->setWindowTitle("Руководство пользователя");
+    wgt->resize(pixmap1.width(), pixmap1.width() / 2);
+    wgt->setFixedSize(wgt->size());
+    wgt->setWindowIcon(QIcon(":/toolbaricons/resources/logo2.PNG"));
     wgt->show();
+
+    QObject::connect(scrollArea->verticalScrollBar(), &QScrollBar::valueChanged, [scrollArea, imgLabel1, imgLabel2](int value) {
+        if (value == scrollArea->verticalScrollBar()->maximum()) {
+            scrollArea->setWidget(imgLabel2);
+        }
+    });
+
     return wgt;
 }
 

@@ -2,7 +2,7 @@
     <qresource prefix="/references">
         <file>resources/fdl-1.3.txt</file>
         <file>resources/aboutSheet.jpg</file>
-        <file>resources/authors.jpg</file>
-        <file>resources/authors.svg</file>
+        <file>resources/doc1.png</file>
+        <file>resources/doc2.png</file>
     </qresource>
 </RCC>
