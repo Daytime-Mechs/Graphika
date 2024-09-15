@@ -94,8 +94,6 @@ public:
      */
     QString sendDataToSolveSys( const QString& pythonFilePath, const QString& functionName, const QVector< QVector<double> >& sys );
 
-    QVector<double> sendDataToSolveNonLinearSys( const QString& pythonFilePath, const QString& functionName, const QString& nonLinearSys );
-
     /*!
      * \brief initPythonInterpreter: Initializes the Python interpreter.
      */
