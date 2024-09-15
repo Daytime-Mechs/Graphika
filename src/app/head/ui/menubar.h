@@ -85,7 +85,6 @@ private:
     QAction* sysAction; ///< equations action menu.
     QAction* gaussMethod; ///< specific equations method.
     QAction* nonlinearNewthonMethod; ///< specific equations method.
-    QAction* simpleIterMethod; ///< specific equations method.
 
     QMenu* diffMenu; ///< derivation menu.
     QMenu* integralMenu; ///< integration menu.
