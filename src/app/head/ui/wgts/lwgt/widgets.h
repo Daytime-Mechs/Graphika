@@ -100,6 +100,14 @@ public:
     QLabel* nonLinearXMinLabel;
     QLabel* nonLinearXMaxLabel;
     QLabel* nonLinearStepLabel;
+
+    QWidget* nonLinearXMinContainer;
+    QHBoxLayout* nonLinearXMinLayout;
+    QWidget* nonLinearXMaxContainer;
+    QHBoxLayout* nonLinearXMaxLayout;
+    QWidget* nonLinearStepContainer;
+    QHBoxLayout* nonLinearStepLayout;
+
     /*!
      * \brief Widgets: constructor with standard heir argument.
      *
@@ -164,6 +172,13 @@ public:
             nonLinearXMaxLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
             nonLinearStepLabel = new QLabel( "Шаг:" );
             nonLinearStepLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+            nonLinearXMinContainer = new QWidget;
+            nonLinearXMinLayout = new QHBoxLayout(nonLinearXMinContainer);
+            nonLinearXMaxContainer = new QWidget;
+            nonLinearXMaxLayout = new QHBoxLayout(nonLinearXMaxContainer);
+            nonLinearStepContainer = new QWidget;
+            nonLinearStepLayout = new QHBoxLayout(nonLinearStepContainer);
         } // Переменные элементы
 
         derivativeExpressionInput = new QLineEdit( this );
@@ -220,6 +235,9 @@ private:
         nonLinearStep->setRange(0.001, 1);
         nonLinearStep->setSingleStep(0.001);
         nonLinearStep->setDecimals(3);
+        nonLinearXMinLayout->setSpacing(11);
+        nonLinearXMaxLayout->setSpacing(6);
+        nonLinearStepLayout->setSpacing(21);
     }
 
 signals:
