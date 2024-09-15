@@ -14,7 +14,9 @@
 #include <QTextStream>
 #include "qdebug.h"
 
-
+/*!
+ * \brief The Appearance class for view dialog window
+ */
 class Appearance : public QDialog
 {
     Q_OBJECT

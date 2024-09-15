@@ -48,7 +48,7 @@ class GraphBuilder : public QWidget, protected QOpenGLFunctions
     Q_OBJECT
 private:
 
-    enum WidgetType {ThreeDWidget, CustomPlotWidget};
+    enum WidgetType { ThreeDWidget, CustomPlotWidget };
 
     QCPItemTracer* tracer; ///< Tracer linked to data points.
     QVBoxLayout* layout; ///< The layout to which all other objects are written.
@@ -181,9 +181,10 @@ public slots:
     /*!
      * \brief savePlotAsImage: Saves graphs.
      */
-    void savePlotAsImage();
+    void savePlotAsImage( void );
 
-    void setupThreeCView();
+
+    void setupThreeCView( void );
 
     void mousePressEventd( QMouseEvent* event );
 
@@ -192,6 +193,7 @@ public slots:
     void wheelEventd( QWheelEvent* event );
 
     void switchToGL3DGraphBuilder( void );
+
     void switchToGraphBuilder( void );
 
 signals:

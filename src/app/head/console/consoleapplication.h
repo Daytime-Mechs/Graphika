@@ -22,6 +22,9 @@
 
 typedef std::vector<std::vector<double>> pair;
 
+/*!
+ * \brief The ConsoleApplication class for non GUI systems ( in development )
+ */
 class ConsoleApplication
 {
 private:

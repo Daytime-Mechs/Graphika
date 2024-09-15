@@ -3,7 +3,7 @@
  *
  * \author Malaniya Mark Timurovich, Dnevnie Mechaniki.
  *
- * \date last update: 18.05.2024.
+ * \date last update: 15.09.2024.
  */
 
 #ifndef RIGHTWIDGET_H
@@ -219,6 +219,7 @@ public slots:
      * \param stack for data log system (in development).
      */
     void printDerivationGraph( const QVector<double>& x, const QVector<double>& y, Sender& sender, LogList* stack );
+
     void updateLegend( const QString& legendText );
     void setFunctionText( const QString& functionText );
 
