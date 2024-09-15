@@ -23,7 +23,8 @@ class EquationsLayout : public LayoutInitializer
     Q_OBJECT
 private:
     QGridLayout* layout; ///< a grid layout for widgets.
-    bool nonLinearFlag = false;
+    bool nonLinearFlag = false; ///< Flag indicating if non-linear equations are active.
+
 public:
     /*!
      * standard class-destructor.
@@ -45,15 +46,38 @@ public:
     QGridLayout* get( void ) override;
 
 public slots:
+    /*!
+     * \brief updateEquationsButtonsPosition: Adjusts the position of equation control buttons.
+     */
     void updateEquationsButtonsPosition( void );
+    /*!
+     * \brief onAddEquationRowButtonClicked: Adds a new row for equation input.
+     */
     void onAddEquationRowButtonClicked( void );
+    /*!
+     * \brief onRemoveEquationRowButtonClicked: Removes the selected row from the equation input table.
+     */
     void onRemoveEquationRowButtonClicked( void );
+    /*!
+     * \brief hideEquationsButtonsWidget: Hides the buttons used for controlling the equations table.
+     */
     void hideEquationsButtonsWidget( void );
+    /*!
+     * \brief setNonLinearFlag: Sets the flag for non-linear equation mode.
+     *
+     * \param flag: Boolean value to indicate if non-linear mode is enabled.
+     */
     void setNonLinearFlag( bool flag );
+    /*!
+     * \brief updateNonLinearSpinBoxes: Updates the spin boxes related to non-linear equations.
+     */
     void updateNonLinearSpinBoxes( void );
 
 signals:
-    void equationsTableEdited() void ;
+    /*!
+     * \brief equationsTableEdited: Signal emitted when the equations table is edited.
+     */
+    void equationsTableEdited();
 
 };
 
