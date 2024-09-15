@@ -13,7 +13,7 @@ void ReportGenerator::generateReport( const LogList& logList, const QString& tit
     painter.setRenderHint(QPainter::Antialiasing);
 
     // title
-    QPixmap logo(":/toolbaricons/resources/logo.png");
+    QPixmap logo(":/toolbaricons/resources/logo.PNG");
     painter.setFont(QFont("Arial", 16, QFont::Bold));
     painter.fillRect(0, 0, pdfWriter.width(), pdfWriter.height(), Qt::white);
     painter.setPen(Qt::black);

@@ -71,7 +71,7 @@ void GL3DGraphBuilder::savePlotAsImage( void )
     }
 
     QPixmap pixmap = QPixmap::grabWidget( this );
-    pixmap.save( fileName + "png" );
+    pixmap.save( fileName );
 }
 
 void GL3DGraphBuilder::render( QOpenGLFramebufferObject* fbo )
