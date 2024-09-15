@@ -86,7 +86,21 @@ public slots:
      */
     void initLayout( SpecialBuffer& buffer, pymodules::Modules module );
 
+    /*!
+     * \brief applyProgrammerSettings: save new settings statement
+     *
+     * \param min
+     * \param Ymin
+     * \param max
+     * \param Ymax
+     * \param minStep
+     * \param maxStep
+     * \param minNodes
+     * \param maxNodes
+     * \param decimals
+     */
     void applyProgrammerSettings( double min, double Ymin, double max, double Ymax, double minStep, double maxStep, double minNodes, double maxNodes, int decimals );
+
     void onTableEdited();
     void onEquationsTableEdited();
     void setNonLinearFlag( bool flag );

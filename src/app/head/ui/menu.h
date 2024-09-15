@@ -3,7 +3,7 @@
  *
  * \author Malaniya Mark Timurovich, Dnevnie Mechaniki.
  *
- * \date last update: 18.05.2024.
+ * \date last update: 15.09.2024.
  */
 
 #ifndef MENU_H
@@ -87,7 +87,15 @@ signals:
      * \brief aboutMenuOppened: A signal emitted when the about menu is opened.
      */
     void aboutMenuOppened( void );
+
+    /*!
+     * \brief programmatorOppened: A signal emitted when the programmator menu is opened
+     */
     void programmatorOppened( void );
+
+    /*!
+     * \brief viewMenuOppened: A signal when the view menu is opened
+     */
     void viewMenuOppened( void );
 };
 

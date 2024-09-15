@@ -12,6 +12,9 @@
 #include <string>
 #include <QTime>
 
+/*!
+ * \brief The SessionWidget class: generates when session process started
+ */
 class SessionWidget : public QWidget
 {
     Q_OBJECT
