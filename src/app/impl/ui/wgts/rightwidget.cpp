@@ -349,18 +349,6 @@ void RightWidget::differentiationSolve( SpecialBuffer& buffer, const QVector<dou
 
 void RightWidget::sysSolve( const QVector<QVector<double>>& data, const Sender& sender )
 {
-    if( eqSysText.size() > 2 )
-    {
-        QVector<double> resultSysVector = conveyor->sendDataToSolveNonLinearSys(":/pyFiles/resources/pymodules/nonlinear_laes_solver.py", "solve_nonlinear_system", eqSysText );
-        qDebug() << "getting vector: ";
-        for( const auto& e : resultSysVector )
-        {
-            qDebug() << e << "\n";
-        }
-        eqSysText.clear();
-        return;
-    }
-
     QString resultSysStr = conveyor->sendDataToSolveSys( sender.moduleName, sender.functionName, data );
     emit readyToSendSysResult( resultSysStr );
     qDebug() << resultSysStr;

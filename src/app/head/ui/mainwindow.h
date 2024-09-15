@@ -34,7 +34,7 @@ private:
     QMainWindow* mainWindow; ///< main menu window.
     MenuBar* menubar; ///< items for window switching.
     QWidget* centralwidget; ///< bottom layer.
-    ProgrammerDialog* programmer;
+    ProgrammerDialog* programmer; ///< programmer settings dialog.
     SessionWidget* sessionWidget;
     Appearance* appearance;
 

@@ -31,14 +31,14 @@ class RightWidget : public QWidget
 private:
     std::string resultModel; ///< model of interpolation.
     std::string area; ///< area of ​​the trapezoid under the curve.
-    QString currentLegend;
-    QString functionText;
-    QString eqSysText;
-    GraphBar* graphBar;
+    QString currentLegend;  ///< currently displayed legend text on the graph.
+    QString functionText; ///< mathematical function in string form.
+    QString eqSysText; ///< system of equations in string form.
+    GraphBar* graphBar; ///< instance of GraphBar for handling graph settings and options.
 
-    int graphBarWidth, graph2dHeight, graph3dHeight;;
+    int graphBarWidth, graph2dHeight, graph3dHeight;
 
-    bool unpinned{ false };
+    bool unpinned{ false }; ///< flag indicating if the graph is unpinned.
 
 public:
     QGridLayout* rightLayout; ///< main right-widget layout.
@@ -65,6 +65,10 @@ public:
     explicit RightWidget( QWidget *parent = nullptr );
 
     std::string getResultModel( void ) { return resultModel; }
+    /*!
+     * \brief getArea: returns the area under the curve.
+     * \return calculated area as a string.
+     */
     std::string getArea( void ) { return area; }
 
     /*!
@@ -179,11 +183,21 @@ public:
      * \brief zoomOut: decrease zoom on plot.
      */
     void zoomOut();
-
+    /*!
+    * \brief resetZoom: resets the zoom level of the graph to its default state.
+    */
     void resetZoom();
 
+    /*!
+    * \brief couldSavePlotAsImage: enables or disables the ability to save the plot as an image.
+    *
+    * \param couldSave: boolean flag indicating whether the plot can be saved.
+    */
     void couldSavePlotAsImage( bool couldSave );
 
+    /*!
+    * \brief unpinGraph: unpins the graph, allowing it to be freely moved or resized.
+    */
     void unpinGraph();
 
     /*!
@@ -220,9 +234,24 @@ public slots:
      */
     void printDerivationGraph( const QVector<double>& x, const QVector<double>& y, Sender& sender, LogList* stack );
 
+    /*!
+     * \brief updateLegend: updates the graph legend with the provided text.
+     *
+     * \param legendText: text to display in the legend.
+     */
     void updateLegend( const QString& legendText );
+    /*!
+     * \brief setFunctionText: sets the function text displayed on the graph.
+     *
+     * \param functionText: mathematical function in string form.
+     */
     void setFunctionText( const QString& functionText );
 
+    /*!
+     * \brief hideBarButtons: hides or shows the bar buttons on the graph.
+     *
+     * \param hide: true to hide the buttons, false to show them.
+     */
     void hideBarButtons( const bool& hide );
 
     void acceptNonLinearSys( const QString& sys );
@@ -263,9 +292,19 @@ signals:
      * \param result: intersection points.
      */
     void readyToSendSysResult( const QString &result );
-
+    /*!
+    * \brief readyToSendNonLinearSysResult: signal emitted when the solution of a non-linear system is ready.
+    *
+    * \param result: vector of results representing the solution of the non-linear system.
+    */
     void readyToSendNonLinearSysResult( const QVector<double> &result );
 
+    /*!
+    * \brief calculateError: signal emitted to calculate the error between two sets of data.
+    *
+    * \param y1: first set of y data values.
+    * \param y2: second set of y data values to compare.
+    */
     void calculateError( const QVector<double>& y1, const QVector<double>& y2 );
 };
 

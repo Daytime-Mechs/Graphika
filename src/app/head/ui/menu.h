@@ -23,7 +23,7 @@ class Menu : public QMainWindow
 {
     Q_OBJECT
 public:
-QAction* programmatorAction;
+QAction* programmatorAction; ///< QAction to trigger the programmer dialog.
 
 private:
     QWidget* parent; ///< A pointer to the parent widget of the menu.

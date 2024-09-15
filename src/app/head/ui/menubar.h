@@ -66,11 +66,11 @@ protected:
     void mousePressEvent( QMouseEvent *event ) override;
 
 private:
-    QAction* plotFunctionAction;
+    QAction* plotFunctionAction; ///< QAction for plotting functions.
 
-    QAction* lagrangeAction;
-    QAction* newthonAction;
-    QAction* beirutAction;
+    QAction* lagrangeAction; ///< QAction for Lagrange polynomial method.
+    QAction* newthonAction; ///< QAction for Newton polynomial method.
+    QAction* beirutAction; ///< QAction for Beirut polynomial method.
 
     QAction* diffAction; ///< derivation action menu.
     QAction* methodTwoDots; ///< specific derivation method.
@@ -154,15 +154,39 @@ private:
      * \brief setCheckable: set all actions checkable.
      */
     void setCheckable( void );
+    /*!
+     * \brief isPersistentAction: checks if the action is persistent (i.e., stays active).
+     * \param action: the action to check.
+     * \return true if the action is persistent, otherwise false.
+     */
     bool isPersistentAction(QAction* action);
+    /*!
+     * \brief connectActions: connects signals and slots for actions.
+     */
     void connectActions();
 
 signals:
+    /*!
+     * \brief currentMethodChanged: signal emitted when the method of solving or calculating changes.
+     *
+     * \param methodName: name of the selected method.
+     */
     void currentMethodChanged( const QString& methodName );
+    /*!
+     * \brief containsNonLinearData: signal emitted if non-linear data is detected.
+     *
+     * \param nonLinear: true if non-linear data is present, otherwise false.
+     */
     void containsNonLinearData( const bool& nonLinear );
 
 private slots:
+    /*!
+     * \brief handleDiffActionTriggered: handles the event when a differentiation action is triggered.
+     */
     void handleDiffActionTriggered( void );
+    /*!
+     * \brief handleIntegralActionTriggered: handles the event when an integration action is triggered.
+     */
     void handleIntegralActionTriggered( void );
 };
 
