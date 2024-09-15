@@ -433,54 +433,60 @@ std::string solveEquation(const std::string& equation) {
 }
 
 template<typename T>
-std::size_t LayoutInitializer::findElementIndex( const std::vector<T>& vec, const T& element )
+std::size_t LayoutInitializer::findElementIndex(const std::vector<T>& vec, const T& element)
 {
-    auto it = std::find( vec.begin(), vec.end(), element );
+    auto it = std::find(vec.begin(), vec.end(), element);
     if (it == vec.end()) {
         return std::numeric_limits<std::size_t>::max();
     }
-    return std::distance(vec.begin(), it);
+    return static_cast<std::size_t>(std::distance(vec.begin(), it));
 }
 
-bool LayoutInitializer::containsCommonElements( const std::vector<std::vector<double>>& data, const std::vector<double>& X, std::vector<double>& res )
+bool LayoutInitializer::containsCommonElements(const std::vector<std::vector<double>>& data, const std::vector<double>& X, std::vector<double>& res)
 {
-    if( data.empty() || data[0].empty() )
+    if (data.empty() || data[0].empty() || X.empty())
     {
         return false;
     }
 
-    for( double commonElement : data[0] )
+    std::unordered_map<double, std::vector<std::pair<std::size_t, std::vector<std::size_t>>>> indexMap;
+
+    for (std::size_t i = 0; i < X.size(); ++i)
     {
-        bool allContainCommon = true;
-        for( size_t i = 1; i < data.size(); ++i )
+        for (std::size_t j = 0; j < data.size(); ++j)
         {
-            bool found = false;
-            for( double x : data[i] )
+            std::size_t dataIndex = findElementIndex(data[j], X[i]);
+            if (dataIndex != std::numeric_limits<std::size_t>::max())
             {
-                if ( x == commonElement && findElementIndex(X, x) == findElementIndex(data[i], x) )
+                indexMap[X[i]].emplace_back(i, std::vector<std::size_t>{dataIndex});
+            }
+        }
+    }
+
+    for (const auto& pair : indexMap)
+    {
+        if (pair.second.size() == data.size())
+        {
+            bool allEqual = true;
+            for (std::size_t i = 1; i < pair.second.size(); ++i)
+            {
+                if (pair.second[i].second != pair.second[0].second)
                 {
-                    found = true;
+                    allEqual = false;
                     break;
                 }
             }
-            if( !found )
+            if (allEqual)
             {
-                allContainCommon = false;
-                break;
+                res.push_back(pair.first);
             }
-        }
-        if( allContainCommon )
-        {
-            res.push_back( commonElement );
         }
     }
 
-    if( res.empty() )
-    {
-        return false;
-    }
-    return true;
+    return !res.empty();
 }
+
+
 
 void LayoutInitializer::onSolveEquationsButtonClicked( void )
 {
@@ -533,9 +539,9 @@ void LayoutInitializer::onSolveEquationsButtonClicked( void )
         std::vector<std::vector<double>> allRoots;
         std::vector<double> xArr;
 
-        //TODO: здесь у нас как раз должны быть подставлены макросы Мин Макс Шаг
         for (double i = widgets->nonLinearXMin->value(); i <= widgets->nonLinearXMax->value(); i += widgets->nonLinearStep->value())
             xArr.emplace_back(i);
+
 
         for(const auto& equation : equations)
         {
@@ -596,7 +602,7 @@ void LayoutInitializer::containsNonLinearData( const bool& nl )
     widgets->nonLinear = nl;
     if(widgets->nonLinear)
     {
-        widgets->oddsInputLabel->setText( QString::asprintf( "Вы находитесь в режиме поиска корней в системе нелинейных уравнений,\nгде слева: f(x), а справа константа.\nВ левую часть таблицы вводите мат. выражения вида f(x), а слева - целочисленную постоянную.\nПарсер математического выражения преобразует входные\nданные следующим образом: f(x) +/- C = 0 и найдет корни." ) );
+        widgets->oddsInputLabel->setText( QString::asprintf( "Вы находитесь в режиме поиска корней в системе нелинейных уравнений,\nгде слева: f(x), а справа константа.\nВ левую часть таблицы вводите мат. выражения вида f(x), а слева - целочисленную постоянную.\nПарсер математического выражения преобразует входные\nданные следующим образом: f(x) +/- C = 0 и найдет корни.\nПРИМЕЧАНИЕ: Для корректного вычисления корней - выбирайте четный шаг!" ) );
     }
     else widgets->oddsInputLabel->setText( QString::asprintf( "Введите через пробел коэффициенты \nлинейных уравнений и свободный член" ) );
 }

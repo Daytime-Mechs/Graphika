@@ -77,7 +77,8 @@ signals:
     /*!
      * \brief equationsTableEdited: Signal emitted when the equations table is edited.
      */
-    void equationsTableEdited();
+
+    void equationsTableEdited( void );
 
 };
 
