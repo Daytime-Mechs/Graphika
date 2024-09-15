@@ -18,40 +18,36 @@ void EquationsLayout::generateWidgets( Widgets& widgets )
     widgets.clearEquationsTable->setText( "Очистить Таблицу" );
     widgets.resultOfEquations->setText( "Результат вычислений: " );
     widgets.resultDescription->setText( "Описание: " );
+    layout->addWidget( widgets.oddsInputLabel, 0, 0 );
+    layout->addWidget( widgets.equationsTableWidget, 1, 0, 1, 2 );
 
     if (nonLinearFlag)
     {
-        layout->addWidget( widgets.oddsInputLabel, 0, 0 );
-        layout->addWidget( widgets.equationsTableWidget, 1, 0, 1, 2 );
-        layout->addWidget( widgets.nonLinearXMinLabel, 2, 0);
-        layout->addWidget( widgets.nonLinearXMin, 2, 1 );
-        layout->addWidget( widgets.nonLinearXMaxLabel, 3, 0);
-        layout->addWidget( widgets.nonLinearXMax, 3, 1 );
-        layout->addWidget( widgets.nonLinearStepLabel, 4, 0);
-        layout->addWidget( widgets.nonLinearStep, 4, 1 );
-        layout->addWidget( widgets.solveEquations, 5, 0 );
-        layout->addWidget( widgets.clearEquationsTable, 5, 1 );
-        layout->addWidget( widgets.resultOfEquations, 6, 0 );
-        layout->addWidget( widgets.eqResult, 7, 0 );
-        layout->addWidget( widgets.resultDescription, 8, 0 );
-        layout->addWidget( widgets.description, 9, 0 );
+        widgets.oddsInputLabel->setText(QString::asprintf("Вы находитесь в режиме поиска корней в системе нелинейных уравнений,\nгде слева: f(x), а справа константа.\nВ левую часть таблицы вводите мат. выражения вида f(x), а слева - целочисленную постоянную.\nПарсер математического выражения преобразует входные\nданные следующим образом: f(x) +/- C = 0 и найдет корни."));
 
-        // Установить минимальную ширину для столбца 0
-        layout->setColumnMinimumWidth(0, 100);
-
-        // Установить растяжение для столбцов
-        layout->setColumnStretch(0, 1);
-        layout->setColumnStretch(1, 2);
-    } else {
-        layout->addWidget( widgets.oddsInputLabel, 0, 0 );
-        layout->addWidget( widgets.equationsTableWidget, 1, 0, 1, 2 );
-        layout->addWidget( widgets.solveEquations, 5, 0 );
-        layout->addWidget( widgets.clearEquationsTable, 5, 1 );
-        layout->addWidget( widgets.resultOfEquations, 6, 0 );
-        layout->addWidget( widgets.eqResult, 7, 0 );
-        layout->addWidget( widgets.resultDescription, 8, 0 );
-        layout->addWidget( widgets.description, 9, 0 );
+        widgets.nonLinearXMinLayout->addWidget(widgets.nonLinearXMinLabel);
+        widgets.nonLinearXMinLayout->addWidget(widgets.nonLinearXMin);
+        widgets.nonLinearXMinLayout->setStretch(0, 1);
+        widgets.nonLinearXMinLayout->setStretch(1, 2);
+        widgets.nonLinearXMaxLayout->addWidget(widgets.nonLinearXMaxLabel);
+        widgets.nonLinearXMaxLayout->addWidget(widgets.nonLinearXMax);
+        widgets.nonLinearXMaxLayout->setStretch(0, 1);
+        widgets.nonLinearXMaxLayout->setStretch(1, 2);
+        widgets.nonLinearStepLayout->addWidget(widgets.nonLinearStepLabel);
+        widgets.nonLinearStepLayout->addWidget(widgets.nonLinearStep);
+        widgets.nonLinearStepLayout->setStretch(0, 1);
+        widgets.nonLinearStepLayout->setStretch(1, 2);
+        layout->addWidget(widgets.nonLinearXMinContainer, 2, 0, 1, 2);
+        layout->addWidget(widgets.nonLinearXMaxContainer, 3, 0, 1, 2);
+        layout->addWidget(widgets.nonLinearStepContainer, 4, 0, 1, 2);
     }
+
+    layout->addWidget( widgets.solveEquations, 5, 0 );
+    layout->addWidget( widgets.clearEquationsTable, 5, 1 );
+    layout->addWidget( widgets.resultOfEquations, 6, 0 );
+    layout->addWidget( widgets.eqResult, 7, 0 );
+    layout->addWidget( widgets.resultDescription, 8, 0 );
+    layout->addWidget( widgets.description, 9, 0 );
 
     // ВРЕМЕННО ЗАКРОЕМ ДОСТУП К ДАННЫМ ПУНКТАМ
     {
@@ -169,42 +165,30 @@ void EquationsLayout::updateNonLinearSpinBoxes()
     {
         if (!layout->indexOf(widgets->nonLinearXMin) != -1)
         {
-            layout->addWidget( widgets->nonLinearXMinLabel, 2, 0);
-            layout->addWidget( widgets->nonLinearXMin, 2, 1);
-            layout->addWidget( widgets->nonLinearXMaxLabel, 3, 0);
-            layout->addWidget( widgets->nonLinearXMax, 3, 1 );
-            layout->addWidget( widgets->nonLinearStepLabel, 4, 0);
-            layout->addWidget( widgets->nonLinearStep, 4, 1 );
-
-            // Установить минимальную ширину для столбца 0
-            layout->setColumnMinimumWidth(0, 100);
-
-            // Установить растяжение для столбцов
-            layout->setColumnStretch(0, 1);
-            layout->setColumnStretch(1, 2);
+            widgets->nonLinearXMinLayout->addWidget(widgets->nonLinearXMinLabel);
+            widgets->nonLinearXMinLayout->addWidget(widgets->nonLinearXMin);
+            widgets->nonLinearXMinLayout->setStretch(0, 1);
+            widgets->nonLinearXMinLayout->setStretch(1, 2);
+            widgets->nonLinearXMaxLayout->addWidget(widgets->nonLinearXMaxLabel);
+            widgets->nonLinearXMaxLayout->addWidget(widgets->nonLinearXMax);
+            widgets->nonLinearXMaxLayout->setStretch(0, 1);
+            widgets->nonLinearXMaxLayout->setStretch(1, 2);
+            widgets->nonLinearStepLayout->addWidget(widgets->nonLinearStepLabel);
+            widgets->nonLinearStepLayout->addWidget(widgets->nonLinearStep);
+            widgets->nonLinearStepLayout->setStretch(0, 1);
+            widgets->nonLinearStepLayout->setStretch(1, 2);
+            layout->addWidget(widgets->nonLinearXMinContainer, 2, 0, 1, 2);
+            layout->addWidget(widgets->nonLinearXMaxContainer, 3, 0, 1, 2);
+            layout->addWidget(widgets->nonLinearStepContainer, 4, 0, 1, 2);
         }
-        widgets->nonLinearXMinLabel->show();
-        widgets->nonLinearXMin->show();
-        widgets->nonLinearXMaxLabel->show();
-        widgets->nonLinearXMax->show();
-        widgets->nonLinearStepLabel->show();
-        widgets->nonLinearStep->show();
+        widgets->nonLinearStepContainer->show();
+        widgets->nonLinearXMaxContainer->show();
+        widgets->nonLinearXMinContainer->show();
     }
     else
     {
-        if (layout->indexOf(widgets->nonLinearXMin) != -1)
-        {
-            widgets->nonLinearXMinLabel->hide();
-            widgets->nonLinearXMin->hide();
-            widgets->nonLinearXMaxLabel->hide();
-            widgets->nonLinearXMax->hide();
-            widgets->nonLinearStepLabel->hide();
-            widgets->nonLinearStep->hide();
-
-            // Сбросить минимальную ширину и растяжение для столбцов
-            layout->setColumnMinimumWidth(0, 0);
-            layout->setColumnStretch(0, 0);
-            layout->setColumnStretch(1, 0);
-        }
+        widgets->nonLinearStepContainer->hide();
+        widgets->nonLinearXMaxContainer->hide();
+        widgets->nonLinearXMinContainer->hide();
     }
 }
