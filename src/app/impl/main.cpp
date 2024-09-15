@@ -80,8 +80,22 @@ int main( int argc, char *argv[] )
     {
         QApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
         QApplication a( argc, argv );
+
         MainWindow window;
-        window.show();
+
+        QSplashScreen* ss = new QSplashScreen;
+
+        QPixmap logo( ":/toolbaricons/resources/logo.PNG" );
+        QPixmap scaledLogo = logo.scaled( 255, 255, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+
+        ss->setPixmap( scaledLogo );
+        ss->show();
+
+        QTimer::singleShot( 1000, [&]()
+        {
+            ss->finish( &window );
+            window.show();
+        });
 
         return a.exec();
     }

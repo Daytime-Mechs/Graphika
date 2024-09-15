@@ -137,6 +137,9 @@ public slots:
      */
     void openLicenseMenu( void );
 
+    /*!
+     * \brief openViewDialog: generating view window with themes and font redactor
+     */
     void openViewDialog( void );
 
     /*!
@@ -149,7 +152,10 @@ public slots:
      */
     void deleteWidgets( void );
 
-    void openProgrammerDialog();
+    /*!
+     * \brief openProgrammerDialog: generating programmer window
+     */
+    void openProgrammerDialog( void );
 
 private slots:
     void showSaveDialog( const QTime& elapsedTime );

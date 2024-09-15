@@ -3,7 +3,7 @@
  *
  * \author Malaniya Mark Timurovich, Dnevnie Mechaniki.
  *
- * \date last update: 20.05.2024.
+ * \date last update: 15.09.2024.
  */
 
 
@@ -156,6 +156,28 @@ public:
      */
     void showTable( const std::vector<double> x, const std::vector<double> y, const std::vector<double> z, const std::vector<double> dY );
 
+private:
+
+    /*!
+     * \brief findElementIndex: return const unsigned index of sought after element
+     * \param vec: given array
+     * \param element: object of interest
+     *
+     * \return unsigned index
+     */
+    template<typename T>
+    std::size_t findElementIndex( const std::vector<T>& vec, const T& element );
+
+    /*!
+     * \brief containsCommonElements: searching for common elements between arrays of data for nonlinear system solving
+     * \param data: vector of f(x)'s data
+     * \param X: x data range
+     * \param res: where to put result
+     * \return
+     */
+    bool containsCommonElements( const std::vector<std::vector<double>>& data, const std::vector<double>& X, std::vector<double>& res );
+
+
 public slots:
     /*!
      * \brief handleParserError: prevents from building a table due to an error.
@@ -192,12 +214,15 @@ public slots:
      */
     void acceptArea( const std::string& area );
 
-    void onAddRowButtonClicked();
-    void onRemoveRowButtonClicked();
-    void updateButtonsPosition();
+    void onAddRowButtonClicked( void );
 
-    void clearTableButtons();
-    void hideButtonsWidget();
+    void onRemoveRowButtonClicked( void );
+
+    void updateButtonsPosition( void );
+
+    void clearTableButtons( void );
+
+    void hideButtonsWidget( void );
 
     void containsNonLinearData( const bool& nl );
 
@@ -216,21 +241,32 @@ signals:
     void invalidExpression( void );
 
     /*!
-     * \brief readyToDraw: emits when the program ready to display given data to plot.
+     * \brief readyToDraw: emit when the program ready to display given data to plot.
      *
      * \param x: given x data variables.
      * \param y: given y data variables.
      */
     void readyToDraw( std::vector<double>& x, std::vector<double>& y );
+
+    /*!
+     * \brief readyToDrawGraphsFromSys emit when given nonlinear system equation function
+     * \param x data array
+     * \param y data array
+     */
     void readyToDrawGraphsFromSys( const QVector<double>& x, const QVector<double>& y );
 
     /*!
-     * \brief readyToSendEquationsData: emits when called when the program is ready to transfer conveniently formed data from the table.
+     * \brief readyToSendEquationsData: emit when called when the program is ready to transfer conveniently formed data from the table.
      *
      * \param data: given formed data from table to vevctor of real number vectors.
      */
     void readyToSendEquationsData( QVector<QVector<double>>& data );
 
+    /*!
+     * \brief readyToSendNonLinearSys: emit during the calculation of roots
+     *
+     * \param sys
+     */
     void readyToSendNonLinearSys( const QString& sys );
 };
 

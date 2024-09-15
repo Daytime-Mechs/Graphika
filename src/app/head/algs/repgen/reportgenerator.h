@@ -1,9 +1,9 @@
-    /*!
+/*!
  * \attention In development.
  *
  * \author Malaniya Mark Timurovich, Dnevnie Mechaniki.
  *
- * \date last update: 18.05.2024.
+ * \date last update: 15.09.2024.
  */
 
 #ifndef REPORTGENERATOR_H
@@ -35,6 +35,15 @@
 class ReportGenerator
 {
 public:
+    /*!
+     * \brief generateReport: generating PDF report in file system
+     *
+     * \param logList list of plot's
+     * \param title
+     * \param authors
+     * \param elapsedTime
+     * \param fileName
+     */
     void generateReport( const LogList& logList, const QString& title, const QString& authors, const QTime& elapsedTime, const QString& fileName );
 };
 

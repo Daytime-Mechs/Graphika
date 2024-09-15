@@ -110,7 +110,6 @@ HEADERS += \
     $$HEADDIR/console/commandhandler.h \
     $$HEADDIR/console/commandcompleter.h \
     src/app/head/console/commands.h \
-    src/app/head/settings/config.h \
     src/app/head/ui/wgts/lwgt/widgets.h \
 
 # Default rules for deployment.

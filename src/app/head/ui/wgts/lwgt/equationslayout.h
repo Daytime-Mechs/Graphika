@@ -3,7 +3,7 @@
  *
  * \author Malaniya Mark Timurovich, Dnevnie Mechaniki.
  *
- * \date last update: 18.05.2024.
+ * \date last update: 15.09.2024.
  */
 
 #ifndef EQUATIONSLAYOUT_H
@@ -45,15 +45,15 @@ public:
     QGridLayout* get( void ) override;
 
 public slots:
-    void updateEquationsButtonsPosition();
-    void onAddEquationRowButtonClicked();
-    void onRemoveEquationRowButtonClicked();
-    void hideEquationsButtonsWidget();
-    void setNonLinearFlag(bool flag);
-    void updateNonLinearSpinBoxes();
+    void updateEquationsButtonsPosition( void );
+    void onAddEquationRowButtonClicked( void );
+    void onRemoveEquationRowButtonClicked( void );
+    void hideEquationsButtonsWidget( void );
+    void setNonLinearFlag( bool flag );
+    void updateNonLinearSpinBoxes( void );
 
 signals:
-    void equationsTableEdited();
+    void equationsTableEdited() void ;
 
 };
 

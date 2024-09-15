@@ -10,8 +10,6 @@ enum Statement
 
 class CommandHandler
 {
-private:
-    //std::list<std::function<void( const QStringList& args )>> functions;
 public:
     static std::string checkoutStatement( const Statement& state );
     static void initFunction( const std::string& command );

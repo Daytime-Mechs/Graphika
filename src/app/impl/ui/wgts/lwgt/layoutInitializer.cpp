@@ -107,26 +107,25 @@ void LayoutInitializer::updateButtonsPosition()
 
     QRect tableGeometry = widgets->tableWidget->geometry();
     int columnCount = widgets->tableWidget->columnCount();
-    int lastColumnWidth = widgets->tableWidget->columnWidth(columnCount - 1);
+    int lastColumnWidth = widgets->tableWidget->columnWidth( columnCount - 1 );
 
-    // Получаем размер крайнего правого заголовка колонки
-    int headerWidth = widgets->tableWidget->horizontalHeader()->sectionSize(columnCount - 1);
+    int headerWidth = widgets->tableWidget->horizontalHeader()->sectionSize( columnCount - 1 );
 
     int buttonWidgetX = tableGeometry.left() + widgets->tableWidget->verticalHeader()->width()
-                        + widgets->tableWidget->columnViewportPosition(columnCount - 1)
-                        + headerWidth + 5; // +5 для небольшого отступа
+                        + widgets->tableWidget->columnViewportPosition (columnCount - 1 )
+                        + headerWidth + 5;
 
     // Получаем положение последней строки
     int rowCount = widgets->tableWidget->rowCount();
-    int lastRowY = widgets->tableWidget->rowViewportPosition(rowCount - 1);
-    int lastRowHeight = widgets->tableWidget->rowHeight(rowCount - 1);
+    int lastRowY = widgets->tableWidget->rowViewportPosition( rowCount - 1 );
+    int lastRowHeight = widgets->tableWidget->rowHeight( rowCount - 1 );
 
-    int buttonWidgetY = tableGeometry.top() + lastRowY + (lastRowHeight / 2) - (widgets->buttonsWidget->height() / 2);
+    int buttonWidgetY = tableGeometry.top() + lastRowY + ( lastRowHeight / 2 ) - ( widgets->buttonsWidget->height() / 2 );
 
-    widgets->buttonsWidget->setGeometry(buttonWidgetX, buttonWidgetY, widgets->buttonsWidget->sizeHint().width(), widgets->buttonsWidget->sizeHint().height());
+    widgets->buttonsWidget->setGeometry( buttonWidgetX, buttonWidgetY, widgets->buttonsWidget->sizeHint().width(), widgets->buttonsWidget->sizeHint().height() );
 
-    connect(addButton, &QPushButton::clicked, this, &LayoutInitializer::onAddRowButtonClicked);
-    connect(removeButton, &QPushButton::clicked, this, &LayoutInitializer::onRemoveRowButtonClicked);
+    connect( addButton, &QPushButton::clicked, this, &LayoutInitializer::onAddRowButtonClicked );
+    connect( removeButton, &QPushButton::clicked, this, &LayoutInitializer::onRemoveRowButtonClicked );
 
     widgets->buttonsWidget->show();
 }
@@ -161,7 +160,6 @@ void LayoutInitializer::hideFirstLayer( void )
 
     widgets->nodes->hide();
     widgets->nodesLabel->hide();
-    //widgets->error->hide();
     widgets->calculatedArea->hide();
     widgets->area->hide();
 
@@ -179,7 +177,6 @@ void LayoutInitializer::hideSecondLayer( void )
 
     widgets->stepLabel->hide();
     widgets->step->hide();
-    //widgets->error->hide();
     widgets->calculatedArea->hide();
     widgets->area->hide();
 
@@ -435,43 +432,53 @@ std::string solveEquation(const std::string& equation) {
     return result;
 }
 
-template <typename T>
-std::size_t findElementIndex(const std::vector<T>& vec, const T& element) {
-    auto it = std::find(vec.begin(), vec.end(), element);
+template<typename T>
+std::size_t LayoutInitializer::findElementIndex( const std::vector<T>& vec, const T& element )
+{
+    auto it = std::find( vec.begin(), vec.end(), element );
     if (it == vec.end()) {
-        return std::numeric_limits<std::size_t>::max(); // Элемент не найден
+        return std::numeric_limits<std::size_t>::max();
     }
     return std::distance(vec.begin(), it);
 }
 
-bool containsCommonElements(const std::vector<std::vector<double>>& data, const std::vector<double>& X, std::vector<double>& res)
+bool LayoutInitializer::containsCommonElements( const std::vector<std::vector<double>>& data, const std::vector<double>& X, std::vector<double>& res )
 {
-    if (data.empty() || data[0].empty()) {
+    if( data.empty() || data[0].empty() )
+    {
         return false;
     }
 
-    for (double commonElement : data[0]) {
+    for( double commonElement : data[0] )
+    {
         bool allContainCommon = true;
-        for (size_t i = 1; i < data.size(); ++i) {
+        for( size_t i = 1; i < data.size(); ++i )
+        {
             bool found = false;
-            for (double x : data[i]) {
-                if (x == commonElement && findElementIndex(X, x) == findElementIndex(data[i], x)) {
+            for( double x : data[i] )
+            {
+                if ( x == commonElement && findElementIndex(X, x) == findElementIndex(data[i], x) )
+                {
                     found = true;
                     break;
                 }
             }
-            if (!found) {
+            if( !found )
+            {
                 allContainCommon = false;
                 break;
             }
         }
-        if (allContainCommon) {
-            res.push_back(commonElement);
-            qDebug() << "get: " << commonElement << "\n";
+        if( allContainCommon )
+        {
+            res.push_back( commonElement );
         }
     }
 
-    if(res.empty()) return false;
+    if( res.empty() )
+    {
+        return false;
+    }
     return true;
 }
 

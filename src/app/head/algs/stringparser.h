@@ -141,12 +141,32 @@ public:
      */
     void setDataX( const std::vector<double>& x ) { xTable = x; }
 
+    /*!
+     * \brief setDataY: vector setter.
+     *
+     * \param y: a list of y values.
+     */
     void setDataY( const std::vector<double>& y ) { yTable = y; }
 
+    /*!
+     * \brief setDataZ: vector setter.
+     *
+     * \param z: a list of z values.
+     */
     void setDataZ( const std::vector<double>& z ) { yTable = z; }
 
+    /*!
+     * \brief setInputData: setter
+     *
+     * \param input
+     */
     void setInputData( unsigned const char* input ) { this->input = input; }
 
+    /*!
+     * \brief getInputData const getter
+     *
+     * \return input data string
+     */
     unsigned char getInputData( void ) const { return *input; }
 
     /*!
