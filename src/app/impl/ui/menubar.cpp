@@ -164,14 +164,11 @@ void MenuBar::initSysMenu()
 {
     sysMenu = new QMenu( this );
 
-    gaussMethod = sysMenu->addAction( "Метод Гаусса (линейный)" );
-    nonlinearNewthonMethod = sysMenu->addAction( "Метод Ньютона (нелинейный)" );
-    simpleIterMethod = sysMenu->addAction( "Метод простых итераций" );
+    gaussMethod = sysMenu->addAction( "Линейные уравнения (метод Гаусса)" );
+    nonlinearNewthonMethod = sysMenu->addAction( "Нелинейные уравнения" );
 
     gaussMethod->setCheckable( true );
     nonlinearNewthonMethod->setCheckable( true );
-    simpleIterMethod->setCheckable( true );
-    simpleIterMethod->setDisabled( true );
 
     gaussMethod->setChecked( true );
     nonlinearNewthonMethod->setChecked( false );
@@ -181,9 +178,6 @@ void MenuBar::initSysMenu()
     });
     connect( nonlinearNewthonMethod, &QAction::triggered, this, [=]() {
         updateSysCheckState( nonlinearNewthonMethod );
-    });
-    connect( simpleIterMethod, &QAction::triggered, this, [=]() {
-        updateSysCheckState( simpleIterMethod );
     });
 }
 
@@ -267,7 +261,6 @@ void MenuBar::updateSysCheckState( QAction *checkedAction )
     {
         if ( checkedAction == gaussMethod )
         {
-            simpleIterMethod->setChecked( false );
             nonlinearNewthonMethod->setChecked( false );
             gaussMethod->setChecked( true );
             emit containsNonLinearData( false );
@@ -275,21 +268,14 @@ void MenuBar::updateSysCheckState( QAction *checkedAction )
         else if( checkedAction == nonlinearNewthonMethod )
         {
             nonlinearNewthonMethod->setChecked( true );
-            simpleIterMethod->setChecked( false );
             gaussMethod->setChecked( false );
             emit containsNonLinearData( true );
-        }
-        else if ( checkedAction == simpleIterMethod )
-        {
-            gaussMethod->setChecked( false );
-            nonlinearNewthonMethod->setChecked( false );
-            simpleIterMethod->setChecked( false );
         }
     }
     else
     {
         // Если действие было снято с выбора, оставляем один из вариантов выбранным
-        if ( !gaussMethod->isChecked() && !simpleIterMethod->isChecked() )
+        if ( !gaussMethod->isChecked() )
         {
             gaussMethod->setChecked( true );
         }
@@ -392,10 +378,6 @@ pymodules::Methods MenuBar::getSelectedSysMethod( void ) const
     if ( gaussMethod->isChecked() )
     {
         return pymodules::Methods::GAUSS;
-    }
-    else if ( simpleIterMethod->isChecked() )
-    {
-        return pymodules::Methods::SIMPLE_ITER;
     }
     return pymodules::Methods::GAUSS;
 }
