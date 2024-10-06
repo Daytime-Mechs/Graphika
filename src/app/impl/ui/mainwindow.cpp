@@ -22,6 +22,7 @@ MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent )
     connect( menu, &Menu::authorsMenuOppened, this, &MainWindow::openAuthorsMenu );
     connect( menu, &Menu::programmatorOppened, this, &MainWindow::openProgrammerDialog );
     connect( menu, &Menu::viewMenuOppened, this, &MainWindow::openViewDialog );
+    connect( menu, &Menu::pluginsOppened, this, &MainWindow::openPluginsDialog );
 
 
     connect( qApp, &QApplication::aboutToQuit, this, &MainWindow::deleteWidgets );
@@ -104,6 +105,8 @@ MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent )
     connect( rightWidget, &RightWidget::calculateError, leftWidget->currentLayout, &LayoutInitializer::calculateDiffError );
     connect( menubar, &MenuBar::containsNonLinearData, leftWidget, &LeftWidget::setNonLinearFlag );
     connect(menubar, &MenuBar::containsNonLinearData, leftWidget, &LeftWidget::updateNonLinearSpinBoxes);
+
+    pluginsListDialog = new PluginsListDialog ( this );
 }
 
 void MainWindow::openMenu( int index, pymodules::Modules module )
@@ -297,6 +300,14 @@ void MainWindow::openProgrammerDialog()
     programmer->resize( 600, 400 );
     programmer->move( 100, 100 );
     programmer->show();
+}
+
+void MainWindow::openPluginsDialog()
+{
+    pluginsListDialog->setWindowTitle(tr ( "Плагины" ) );
+    pluginsListDialog->resize( 600, 400 );
+    pluginsListDialog->move ( 100, 100 );
+    pluginsListDialog->show();
 }
 
 void MainWindow::showSaveDialog( const QTime& elapsedTime )

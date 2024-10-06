@@ -25,6 +25,8 @@ void Menu::createMenu( QWidget* parent )
     QMenu* utilsMenu = menu->addMenu( tr( "&Утилиты" ) );
     startSessionAction = utilsMenu->addAction( tr( "Сессионный режим" ) );
     QAction* programmatorAction = utilsMenu->addAction( tr( "Программатор" ) );
+    QAction* pluginsAction = utilsMenu->addAction( tr( "Плагины") );
     connect( startSessionAction, &QAction::triggered, this, &Menu::sessionStarted );
     connect(programmatorAction, &QAction::triggered, this, &Menu::programmatorOppened );
+    connect( pluginsAction, &QAction::triggered, this, &Menu::pluginsOppened );
 }
