@@ -14,6 +14,7 @@
 #include <QtWidgets>
 #include "programmerdialog.h"
 #include "leftwidget.h"
+#include "pluginDialog/PluginsListDialog.h"
 
 /*!
  * \class Menu
@@ -92,6 +93,8 @@ signals:
      * \brief programmatorOppened: A signal emitted when the programmator menu is opened
      */
     void programmatorOppened( void );
+
+    void pluginsOppened( void );
 
     /*!
      * \brief viewMenuOppened: A signal when the view menu is opened

@@ -36,7 +36,7 @@ VPATH += $$IMPLDIR $$IMPLDIR/algs \
     $$IMPLDIR/utils $$IMPLDIR/ui/wgts/rwgt \
     $$IMPLDIR/ui/menu $$IMPLDIR/console $$IMPLDIR/algs/graphbuilder \
     $$IMPLDIR/utils/notes $$IMPLDIR/utils/appearance $$IMPLDIR/utils/programmer \
-    $$IMPLDIR/algs/repgen
+    $$IMPLDIR/algs/repgen $$IMPLDIR/utils/pluginDialog
 
 SOURCES += \
     $$IMPLDIR/algs/repgen/loglist.cpp \
@@ -70,7 +70,8 @@ SOURCES += \
     $$IMPLDIR/utils/sender.cpp \
     qcustomplot/qcustomplot.cpp \
     $$IMPLDIR/console/commandhandler.cpp \
-    $$IMPLDIR/console/commandcompleter.cpp
+    $$IMPLDIR/console/commandcompleter.cpp \
+    $$IMPLDIR/utils/pluginDialog/PluginsListDialog.cpp
 
 HEADERS += \
     $$HEADDIR/algs/repgen/loglist.h \
@@ -111,6 +112,7 @@ HEADERS += \
     $$HEADDIR/console/commandcompleter.h \
     src/app/head/console/commands.h \
     src/app/head/ui/wgts/lwgt/widgets.h \
+    $$HEADDIR/utils/pluginDialog/PluginsListDialog.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -35,6 +35,7 @@ private:
     MenuBar* menubar; ///< items for window switching.
     QWidget* centralwidget; ///< bottom layer.
     ProgrammerDialog* programmer; ///< programmer settings dialog.
+    PluginsListDialog* pluginsListDialog;
     SessionWidget* sessionWidget;
     Appearance* appearance;
 
@@ -156,6 +157,8 @@ public slots:
      * \brief openProgrammerDialog: generating programmer window
      */
     void openProgrammerDialog( void );
+
+    void openPluginsDialog( void );
 
 private slots:
     void showSaveDialog( const QTime& elapsedTime );
