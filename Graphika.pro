@@ -1,4 +1,4 @@
-QT += core gui opengl printsupport #webenginewidgets
+QT += core gui opengl printsupport network #webenginewidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,7 +18,6 @@ RESOURCES += \
     icons.qrc \
     pymodules.qrc \
     referenceinfo.qrc \
-    resources/web/web.qrc \
     themes.qrc
 
 INCLUDEPATH += ./python3.11 ./Eigen ./openmind ./qcustomplot/include ./plugins \
