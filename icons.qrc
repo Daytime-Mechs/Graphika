@@ -32,4 +32,8 @@
         <file>resources/plus-icon-pressed.png</file>
         <file>resources/minus-icon-pressed.png</file>
     </qresource>
+    <qresource prefix="/pluginDialog">
+        <file>resources/file_thicc.png</file>
+        <file>resources/download_thicc.png</file>
+    </qresource>
 </RCC>
